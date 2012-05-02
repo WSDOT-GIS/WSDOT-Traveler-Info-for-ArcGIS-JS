@@ -3,7 +3,7 @@ WSDOT Traveler Info for ArcGIS JS
 
 Provides information from the [WSDOT Traveler Information API](http://www.wsdot.wa.gov/Traffic/api/) to the [ArcGIS JavaScript API](http://links.esri.com/javascript).
 
-This project is not yet completed.
+**This project is not yet completed.**
 
 
 ## TODO ##
