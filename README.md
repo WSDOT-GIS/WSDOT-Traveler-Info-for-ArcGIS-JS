@@ -5,10 +5,12 @@ Provides information from the [WSDOT Traveler Information API](http://www.wsdot.
 
 **This project is not yet completed.**
 
+## Layer Types ##
+* CameraGraphicsLayer
 
 ## TODO ##
 
-* Since there are multiple cameras in some locations, each graphic should have an array of cameras in a `cameras` attribute.
+* Display camera images in a lightbox type control instead of displaying camera info in a table.
 
 ## Notes ##
 
