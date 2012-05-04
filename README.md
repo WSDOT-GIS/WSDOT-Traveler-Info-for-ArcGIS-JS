@@ -8,7 +8,7 @@ Provides information from the [WSDOT Traveler Information API](http://www.wsdot.
 
 ## TODO ##
 
-* Create a test page to ensure the JavaScript code actually works.
+* Since there are multiple cameras in some locations, each graphic should have an array of cameras in a `cameras` attribute.
 
 ## Notes ##
 

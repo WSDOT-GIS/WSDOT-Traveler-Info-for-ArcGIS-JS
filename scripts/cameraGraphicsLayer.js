@@ -73,6 +73,35 @@
 			this._options = options;
 			this.refresh();
 		},
+		
+		/**
+		 * Searches all of the graphics in the layer until a graphic in the same location as "point" is found.  
+		 * @param {esri.geometry.Point} point 
+		 * @return {esri.Graphic | null} Returns the first graphic found in the same location as "point", or null if no match is found.
+		 */
+		getGraphicAtLocation: function(point) {
+			var layer = this, i, l, graphic, otherGraphic = null;
+			
+			for (i = 0, l = this.graphics.length; i < l; i++) {
+				graphic = this.graphics[i];
+				if (graphic.geometry.x === point.x && graphic.geometry.y === point.y) {
+					otherGraphic = graphic;
+					break;
+				}
+			}
+			
+			return otherGraphic;
+			
+		},
+		
+		/**
+		 * Adds camera data to the layer as a graphic. 
+		 * @param {Object} cameraData One of the objects from the array returned from the GetCameraDataAsJson array. 
+		 */
+		addCamera: function(cameraData) {
+			return this.add(cameraToGraphic(cameraData, this._options.toWebMercator));
+		},
+		
 		/**
 		 * Refreshes the layer's graphics.  Calls the Traveler API to get the camera data and recreates the graphics. 
 		 */
@@ -87,7 +116,8 @@
 				var i, l;
 				try {
 					for (i = 0, l = data.length; i < l; i += 1) {
-						layer.add(cameraToGraphic(data[i], layer._options.toWebMercator));
+						// layer.add(cameraToGraphic(data[i], layer._options.toWebMercator));
+						layer.addCamera(data[i]);
 					}
 
 					layer.onRefreshEnd(); // Trigger event.
