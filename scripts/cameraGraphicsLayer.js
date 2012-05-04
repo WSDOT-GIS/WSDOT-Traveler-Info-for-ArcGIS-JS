@@ -21,15 +21,7 @@
 	 * @param {Boolean} toWebMercator Set to true if you want the graphic to be converted to web mercator, false to leave at WGS 84.
 	 */
 	function cameraToGraphic(cameraData, toWebMercator) {
-		var point, attributes, name, cameraLocation, clName;
-		point = new esri.geometry.Point(cameraData.Latitude, cameraData.Longitude, travelerApiSR);
-		
-		// Convert the point from geo. to WebMercator if that option was specified.
-		if (toWebMercator) {
-			point = esri.geometry.geographicToWebMercator(point);
-		}
-		
-		// Initialize the graphic attributes.
+		var point, attributes, name, cameraLocation, clName, graphic;
 		attributes = {};
 		// Copy the properties from the camera data into "attributes" (excluding "CameraLocation").
 		for (name in cameraData) {
@@ -50,11 +42,20 @@
 				}
 			}
 		}
+		point = new esri.geometry.Point(attributes.Longitude, attributes.Latitude, travelerApiSR);
 		
-		return new esri.Graphic({
-			geometry: point,
-			attributes: attributes
-		});
+		// Convert the point from geo. to WebMercator if that option was specified.
+		if (toWebMercator) {
+			point = esri.geometry.geographicToWebMercator(point);
+		}
+		
+		// Initialize the graphic attributes.
+		
+		
+		graphic = new esri.Graphic();
+		graphic.setAttributes(attributes).setGeometry(point);
+		
+		return graphic;
 	}
 	
 	
@@ -102,16 +103,27 @@
 			if (this._options.renderer) {
 				layer.setRenderer(this._options.renderer);
 			}
-	
-			// Query the WSDOT Traveler API for camera data...
-			return dojo.xhrGet({
-				url: layer.url,
-				handleAs: "json",
-				load: addCameraDataAsGraphics,
-				error: function (error) {
-					layer.onRefreshEnd(error); // Trigger event.
-				}
-			}, { useProxy: false });
+			
+			if (this._options.useJsonp) {
+				dojo.io.script.get({
+					url: layer.url,
+					callbackParamName: "callback",
+					load: addCameraDataAsGraphics,
+					error: function (error) {
+						layer.onRefreshEnd(error); // Trigger event.
+					}
+				});
+			} else {
+				// Query the WSDOT Traveler API for camera data...
+				return dojo.xhrGet({
+					url: layer.url,
+					handleAs: "json",
+					load: addCameraDataAsGraphics,
+					error: function (error) {
+						layer.onRefreshEnd(error); // Trigger event.
+					}
+				}, { useProxy: false });
+			}
 		}
 	});
 }());

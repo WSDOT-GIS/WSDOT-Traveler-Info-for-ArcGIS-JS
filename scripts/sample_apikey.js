@@ -1,0 +1,1 @@
+var apikey = "Replace with your own WSDOT Traveler Info. API access code.";
