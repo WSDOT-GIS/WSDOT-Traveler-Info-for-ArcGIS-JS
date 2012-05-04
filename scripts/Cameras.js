@@ -10,7 +10,6 @@ function init() {
 	
 	function createTable(graphic) {
 		var attributes = graphic.attributes, camera, i, l, table, row, cell, name, names = [], j, jl;
-		console.debug(graphic);
 		table = dojo.create("table");
 		// Create header
 		row = dojo.create("tr", null, table);

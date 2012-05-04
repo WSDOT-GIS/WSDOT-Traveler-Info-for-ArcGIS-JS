@@ -17,11 +17,11 @@
 	
 	
 	function getCameraAttributes(cameraData) {
-		var attributes, name, cameraLocation, clName;
+		var attributes, name, cameraLocation, clName, toOmit = /(Display)?((?:Longitude)|(?:Latitude))/;
 		attributes = {};
 		// Copy the properties from the camera data into "attributes" (excluding "CameraLocation").
 		for (name in cameraData) {
-			if (cameraData.hasOwnProperty(name) && name !== "CameraLocation") {
+			if (!toOmit.test(name) && cameraData.hasOwnProperty(name) && name !== "CameraLocation") {
 				attributes[name] = cameraData[name];
 			}
 		}
@@ -29,7 +29,7 @@
 		// Copy the properties of the CameraLocation property into "attributes".
 		cameraLocation = cameraData.CameraLocation;
 		for (clName in cameraLocation) {
-			if (cameraLocation.hasOwnProperty(clName)) {
+			if (!toOmit.test(clName) && cameraLocation.hasOwnProperty(clName)) {
 				// Check to see if the property already exists in attributes.  If it does, prefix name with "CameraLocation" so the existing value is not overwritten.
 				if (attributes.hasOwnProperty(clName)) {
 					attributes["CameraLocation" + clName] = cameraLocation[clName];
