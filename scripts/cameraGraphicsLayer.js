@@ -140,7 +140,6 @@
 			 */
 			function addCameraDataAsGraphics(data) {
 				var i, l;
-				console.debug("Camera count: " + data.length);
 				try {
 					for (i = 0, l = data.length; i < l; i += 1) {
 						// layer.add(cameraToGraphic(data[i], layer._options.toWebMercator));
@@ -148,7 +147,6 @@
 					}
 
 					layer.onRefreshEnd(); // Trigger event.
-					console.debug("Graphic count: " + layer.graphics.length);
 				} catch (e) {
 					layer.onRefreshEnd(e); // Trigger event.
 				}
