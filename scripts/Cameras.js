@@ -7,6 +7,31 @@ var map;
  
 function init() {
 	"use strict";
+	
+	function createTable(graphic) {
+		var attributes = graphic.attributes, camera, i, l, table, row, cell, name, names = [], j, jl;
+		console.debug(graphic);
+		table = dojo.create("table");
+		// Create header
+		row = dojo.create("tr", null, table);
+		for (name in attributes.cameras[0]) {
+			cell = dojo.create("th", {
+				innerHTML: name
+			}, row);
+			names.push(name);
+		}
+		for (i = 0, l = attributes.cameras.length; i < l; i++) {
+			row = dojo.create("tr", null, table);
+			for (j = 0, jl = names.length; j < jl; j++) {
+				cell = dojo.create("td", {
+					innerHTML: attributes.cameras[i][names[j]]
+				}, row);
+			}
+		}
+		
+		return table;
+	}
+	
 	var initExtent, basemap, symbol, infoTemplate, renderer, cameraLayer;
 	initExtent = new esri.geometry.Extent({
 		xmax: -12915620.315713434,
@@ -31,7 +56,7 @@ function init() {
 	
 	symbol = new esri.symbol.SimpleMarkerSymbol();
 	symbol.setColor(new dojo.Color("red"));
-	infoTemplate = new esri.InfoTemplate("${Title}", "${*}");
+	infoTemplate = new esri.InfoTemplate("Cameras", createTable);
 	renderer = new esri.renderer.SimpleRenderer(symbol);
 	cameraLayer = new wsdot.layers.CameraGraphicsLayer({
 		id: "cameras",
