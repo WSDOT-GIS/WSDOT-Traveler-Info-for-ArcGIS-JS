@@ -66,7 +66,9 @@
 		
 		// Initialize the graphic attributes.
 		graphic = new esri.Graphic();
-		graphic.setAttributes(attributes).setGeometry(point);
+		graphic.setAttributes({
+			cameras: [attributes]
+		}).setGeometry(point);
 		
 		return graphic;
 	}
@@ -111,11 +113,19 @@
 		 * @param {Object} cameraData One of the objects from the array returned from the GetCameraDataAsJson array. 
 		 */
 		addCamera: function(cameraData) {
-			var newGraphic, existingGraphic, graphic;
-			newGraphic = cameraToGraphic(cameraData, this._options.toWebMercator);
-			// existingGraphic = this.getGraphicAtLocation();
-			
-			return this.add(newGraphic);
+			var attributes, point, existingGraphic, newGraphic;
+			point = getCameraPoint(cameraData, this._options.toWebMercator);
+			// See if there are already any graphics where this camera is to be located...
+			existingGraphic = this.getGraphicAtLocation(point);
+			if (existingGraphic) {
+				// Add attributes for the new camera to the exisitng graphic.
+				attributes = getCameraAttributes(cameraData);
+				existingGraphic.attributes.cameras.push(attributes);
+			} else {
+				// Create a new graphic
+				newGraphic = cameraToGraphic(cameraData, this._options.toWebMercator);
+				this.add(newGraphic);
+			}
 		},
 		
 		/**
@@ -130,6 +140,7 @@
 			 */
 			function addCameraDataAsGraphics(data) {
 				var i, l;
+				console.debug("Camera count: " + data.length);
 				try {
 					for (i = 0, l = data.length; i < l; i += 1) {
 						// layer.add(cameraToGraphic(data[i], layer._options.toWebMercator));
@@ -137,6 +148,7 @@
 					}
 
 					layer.onRefreshEnd(); // Trigger event.
+					console.debug("Graphic count: " + layer.graphics.length);
 				} catch (e) {
 					layer.onRefreshEnd(e); // Trigger event.
 				}
