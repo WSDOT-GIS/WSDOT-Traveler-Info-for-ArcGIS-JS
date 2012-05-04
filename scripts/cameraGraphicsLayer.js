@@ -15,13 +15,9 @@
 	
 	var travelerApiSR = new esri.SpatialReference({wkid: 4326});
 	
-	/**
-	 * Converts camera data into a graphic.
-	 * @param {Object} cameraData One of the camera data elements from the GetCamerasAsJson operation.
-	 * @param {Boolean} toWebMercator Set to true if you want the graphic to be converted to web mercator, false to leave at WGS 84.
-	 */
-	function cameraToGraphic(cameraData, toWebMercator) {
-		var point, attributes, name, cameraLocation, clName, graphic;
+	
+	function getCameraAttributes(cameraData) {
+		var attributes, name, cameraLocation, clName;
 		attributes = {};
 		// Copy the properties from the camera data into "attributes" (excluding "CameraLocation").
 		for (name in cameraData) {
@@ -42,22 +38,38 @@
 				}
 			}
 		}
-		point = new esri.geometry.Point(attributes.Longitude, attributes.Latitude, travelerApiSR);
+		
+		return attributes;
+	}
+	
+	function getCameraPoint(cameraData, toWebMercator) {
+		var point = new esri.geometry.Point(cameraData.CameraLocation.Longitude, cameraData.CameraLocation.Latitude, travelerApiSR);
 		
 		// Convert the point from geo. to WebMercator if that option was specified.
 		if (toWebMercator) {
 			point = esri.geometry.geographicToWebMercator(point);
 		}
 		
+		return point;
+	}
+	
+	/**
+	 * Converts camera data into a graphic.
+	 * @param {Object} cameraData One of the camera data elements from the GetCamerasAsJson operation.
+	 * @param {Boolean} toWebMercator Set to true if you want the graphic to be converted to web mercator, false to leave at WGS 84.
+	 */
+	function cameraToGraphic(cameraData, toWebMercator) {
+		var point, attributes, graphic;
+		
+		attributes = getCameraAttributes(cameraData);
+		point = getCameraPoint(cameraData, toWebMercator);
+		
 		// Initialize the graphic attributes.
-		
-		
 		graphic = new esri.Graphic();
 		graphic.setAttributes(attributes).setGeometry(point);
 		
 		return graphic;
 	}
-	
 	
 	dojo.declare("wsdot.layers.CameraGraphicsLayer", esri.layers.GraphicsLayer, {
 		onRefreshStart: function () {
@@ -99,7 +111,11 @@
 		 * @param {Object} cameraData One of the objects from the array returned from the GetCameraDataAsJson array. 
 		 */
 		addCamera: function(cameraData) {
-			return this.add(cameraToGraphic(cameraData, this._options.toWebMercator));
+			var newGraphic, existingGraphic, graphic;
+			newGraphic = cameraToGraphic(cameraData, this._options.toWebMercator);
+			// existingGraphic = this.getGraphicAtLocation();
+			
+			return this.add(newGraphic);
 		},
 		
 		/**
