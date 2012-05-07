@@ -8,27 +8,51 @@ var map;
 function init() {
 	"use strict";
 	
-	function createTable(graphic) {
-		var attributes = graphic.attributes, camera, i, l, table, row, cell, name, names = [], j, jl;
-		table = dojo.create("table");
-		// Create header
-		row = dojo.create("tr", null, table);
-		for (name in attributes.cameras[0]) {
-			cell = dojo.create("th", {
-				innerHTML: name
-			}, row);
-			names.push(name);
-		}
-		for (i = 0, l = attributes.cameras.length; i < l; i++) {
-			row = dojo.create("tr", null, table);
-			for (j = 0, jl = names.length; j < jl; j++) {
-				cell = dojo.create("td", {
-					innerHTML: attributes.cameras[i][names[j]]
-				}, row);
+	// function createTable(graphic) {
+		// var attributes = graphic.attributes, camera, i, l, table, row, cell, name, names = [], j, jl;
+		// table = dojo.create("table");
+		// // Create header
+		// row = dojo.create("tr", null, table);
+		// for (name in attributes.cameras[0]) {
+			// cell = dojo.create("th", {
+				// innerHTML: name
+			// }, row);
+			// names.push(name);
+		// }
+		// for (i = 0, l = attributes.cameras.length; i < l; i++) {
+			// row = dojo.create("tr", null, table);
+			// for (j = 0, jl = names.length; j < jl; j++) {
+				// cell = dojo.create("td", {
+					// innerHTML: attributes.cameras[i][names[j]]
+				// }, row);
+			// }
+		// }
+	// 	
+		// return table;
+	// }
+	
+	function createList(graphic) {
+		var attributes = graphic.attributes, camera, i, l, list, item, a;
+		
+		list = dojo.create("ul");
+		for (i = 0, l = attributes.cameras.length; i < l; i += 1) {
+			camera = attributes.cameras[i];
+			if (camera.ImageURL) {
+				item = dojo.create("li", null, list);
+				a = dojo.create("a", {
+					href: camera.ImageURL,
+					innerHTML: camera.Title,
+					target: "_blank"
+				}, item);
+			} else {
+				item = dojo.create("li", {
+					innerHTML: camera.Title,
+					"class": "no-url"
+				}, list);
 			}
 		}
 		
-		return table;
+		return list;
 	}
 	
 	var initExtent, basemap, symbol, infoTemplate, renderer, cameraLayer;
@@ -55,7 +79,7 @@ function init() {
 	
 	symbol = new esri.symbol.SimpleMarkerSymbol();
 	symbol.setColor(new dojo.Color("red"));
-	infoTemplate = new esri.InfoTemplate("Cameras", createTable);
+	infoTemplate = new esri.InfoTemplate("Cameras", createList);
 	renderer = new esri.renderer.SimpleRenderer(symbol);
 	cameraLayer = new wsdot.layers.CameraGraphicsLayer({
 		id: "cameras",
