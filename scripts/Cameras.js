@@ -55,7 +55,7 @@ function init() {
 		return list;
 	}
 	
-	var initExtent, basemap, symbol, infoTemplate, renderer, cameraLayer;
+	var initExtent, basemap, symbol, infoTemplate, renderer, cameraLayer, refreshInterval;
 	initExtent = new esri.geometry.Extent({
 		xmax: -12915620.315713434,
 		xmin: -14001637.613589166,
@@ -95,5 +95,16 @@ function init() {
 		}
 	})
 	map.addLayer(cameraLayer);
+	
+	/**
+	 * Refreshes the layers. 
+	 */
+	function refresh() {
+		// Refresh the layers
+		cameraLayer.refresh();
+	}
+	
+	// Set the layers to refresh every minute.
+	refresh = setInterval(refresh, 60000);
 }
 dojo.addOnLoad(init);
