@@ -77,8 +77,7 @@ function init() {
 		dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
 	});
 	
-	symbol = new esri.symbol.SimpleMarkerSymbol();
-	symbol.setColor(new dojo.Color("red"));
+	symbol = new esri.symbol.PictureMarkerSymbol("images/camera.png", 24, 12);
 	infoTemplate = new esri.InfoTemplate("Cameras", createList);
 	renderer = new esri.renderer.SimpleRenderer(symbol);
 	cameraLayer = new wsdot.layers.CameraGraphicsLayer({
