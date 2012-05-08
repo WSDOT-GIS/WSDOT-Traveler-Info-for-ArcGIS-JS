@@ -1,4 +1,4 @@
-﻿/*global esri, dojo */
+﻿/*global esri, dojo, wsdot */
 /*jslint white: true, nomen: true */
 /*jshint smarttabs:true, dojo:true */
 
@@ -8,14 +8,13 @@
 
 /// <reference path="dojo.js.uncompressed.js" />
 
-
 (function () {
 	"use strict";
-	
+
 	dojo.require("esri.layers.graphics");
-	
+
 	var travelerApiSR = new esri.SpatialReference({wkid: 4326});
-	
+
 	/**
 	 * Parses the string date representations returned by .NET serialization into a Date object.
 	 * @param {string} A .NET serialized date string.
@@ -32,8 +31,7 @@
 		}
 		return output;
 	}
-	
-	
+
 	/**
 	 * Returns an object containing the attributes in the input data element.  The returned object will be "flattened";
 	 * The properties of the returned object will not be other objects, but values such as string, boolean, date, number, or null.
@@ -53,8 +51,8 @@
 		if (!xRe) {
 			xRe = /Longitude/i;
 		}
-		
-		(function() {
+
+		(function () {
 			var name, value, date;
 			for (name in travelerInfoData) {
 				if (travelerInfoData.hasOwnProperty(name)) {
@@ -66,14 +64,14 @@
 						// Try to parse a date from the string value.
 						date = parseDotNetDate(value);
 						// If it was a date, assign the date to the attribute.  Otherwise assign the original string value.
-						attributes[name] = date !== null ? date : value;
+						attributes[name] = date !== null ? date : value.trim();
 					} else {
 						attributes[name] = value;
 					}
 				}
 			}
 		}());
-		
+
 		// Now loop through all of the atttributes that were other objects.
 		(function() {
 			var name, value, oName, oValue, date, newAttrName;
@@ -87,7 +85,7 @@
 							newAttrName = attributes.hasOwnProperty(oName) ? name + oName : oName;
 							if (typeof(oValue) === "string") {
 								date = parseDotNetDate(oValue);
-								attributes[newAttrName] = date !== null ? date : oValue;
+								attributes[newAttrName] = date !== null ? date : oValue.trim();
 							} else {
 								attributes[newAttrName] = oValue;
 							}
@@ -96,7 +94,7 @@
 				}
 			}
 		}());
-		
+
 		// Loop through the flattened list of attributes to get X and Y.
 		(function(){
 			var name, value;
@@ -110,7 +108,7 @@
 							y = value;
 						}
 					}
-					
+
 					// Break out of the loop if both X and Y values have been found. 
 					if (x !== null && y !== null) {
 						break;
@@ -119,22 +117,22 @@
 
 			}
 		}());
-		
-		
+
 		point = new esri.geometry.Point(x, y, travelerApiSR);
 		// Convert the point from geo. to WebMercator if that option was specified.
 		if (toWebMercator) {
 			point = esri.geometry.geographicToWebMercator(point);
 		}
 		graphic = new esri.Graphic();
-		
+
 		graphic.setGeometry(point).setAttributes(attributes);
-		
+
 		return graphic;
 	}
-	
+
 	/**
 	 * A data layer used for displaying information from the WSDOT Traveler Information API. 
+	 * @class wsdot.layers.TravelerInfoGraphicsLayer 
 	 */
 	dojo.declare("wsdot.layers.TravelerInfoGraphicsLayer", esri.layers.GraphicsLayer, {
 		onRefreshStart: function () {
@@ -154,7 +152,7 @@
 			this._options = options;
 			this.refresh();
 		},
-		
+
 		/**
 		 * Adds travelerInfo data to the layer as a graphic. 
 		 * @param {Object} travelerInfoData One of the objects from the array returned from the Get*AsJson array. 
@@ -163,13 +161,13 @@
 			var graphic = getGraphic(travelerInfoData, this._options.toWebMercator, this._options.xRe, this._options.yRe);
 			this.add(graphic);
 		},
-		
+
 		/**
 		 * Refreshes the layer's graphics.  Calls the Traveler API to get the travelerInfo data and recreates the graphics. 
 		 */
 		refresh: function () {
 			var layer = this;
-			
+
 			/**
 			 * Converts an array of travelerInfo data to graphics and adds the graphics to the layer.
 			 * @param {Object} data An array of travelerInfo data (returned from the Get*AsJson operation).
@@ -187,15 +185,15 @@
 					layer.onRefreshEnd(e); // Trigger event.
 				}
 			}
-			
+
 			this.clear(); // Clear all of the existing graphics from the layer.
 			this.onRefreshStart(); // Trigger event.
-	
+
 			// If a renderer was specified in the options, set the layer's renderer to match.
 			if (this._options.renderer) {
 				layer.setRenderer(this._options.renderer);
 			}
-			
+
 			if (this._options.useJsonp) {
 				dojo.io.script.get({
 					url: layer.url,
