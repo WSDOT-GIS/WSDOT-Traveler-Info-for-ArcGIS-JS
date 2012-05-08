@@ -104,9 +104,9 @@
 				if (attributes.hasOwnProperty(name)) {
 					value = attributes[name];
 					if (typeof(value) === "number") {
-						if (xRe.test(value)) {
+						if (xRe.test(name)) {
 							x = value;
-						} else if (yRe.test(value)) {
+						} else if (yRe.test(name)) {
 							y = value;
 						}
 					}
@@ -121,7 +121,7 @@
 		}());
 		
 		
-		point = new esri.graphics.Point(x, y, travelerApiSR);
+		point = new esri.geometry.Point(x, y, travelerApiSR);
 		// Convert the point from geo. to WebMercator if that option was specified.
 		if (toWebMercator) {
 			point = esri.geometry.geographicToWebMercator(point);
@@ -144,6 +144,10 @@
 		/**
 		 * Creates a new instance of TravelerInfoGraphicsLayer
 		 * @param {Object} options The options for initializing this layer.  See the esri.layers.GraphicsLayer documentation for details.
+		 * @param {String} options.url The URL to the WSDOT Traveler Information API REST endpoint that is providing the data.
+		 * @param {Boolean} options.toWebMercator The WSDOT Traveler Information API provides locations in WGS 1984.  
+		 * If your map is using Web Mercator Auxiliary Sphere (102100), set this value to true.  If your map is WGS 1984, set this to false.
+		 * Any other projection is not supported by this class.
 		 */
 		constructor: function (options) {
 			this.url = options.url;
