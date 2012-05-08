@@ -16,7 +16,7 @@ Displays [traffic camera data from the Traveler Info. API REST endpoint](http://
 ## TODO ##
 
 * `Cameras.html`: Display camera images in a lightbox type control instead of displaying camera info in a table.
-* Some of the REST endpoints return data with a start and end location.
+* Some of the REST endpoints return data with a start and end location.  Figure out how to handle them (show just start or end point?)
 
 ## Notes ##
 
