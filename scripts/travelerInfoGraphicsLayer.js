@@ -146,7 +146,11 @@
 		 * @param {Boolean} options.toWebMercator The WSDOT Traveler Information API provides locations in WGS 1984.  
 		 * If your map is using Web Mercator Auxiliary Sphere (102100), set this value to true.  If your map is WGS 1984, set this to false.
 		 * Any other projection is not supported by this class.
-		 */
+		 * @param {RegExp} options.xRe A regular expression that determines which property of the traveler info data is used for the
+		 * X coordinate.
+		 * @param {RegExp} options.yRe A regular expression that determines which property of the traveler info data is used for the
+		 * Y coordinate.
+		 * */
 		constructor: function (options) {
 			this.url = options.url;
 			this._options = options;

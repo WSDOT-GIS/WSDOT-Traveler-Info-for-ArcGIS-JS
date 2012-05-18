@@ -81,7 +81,7 @@
 		infoTemplate = new esri.InfoTemplate("${Description}", "${*}");
 		gfxLayer = new wsdot.layers.TravelerInfoGraphicsLayer({
 			id: "trafficFlow",
-			url: "http://webpub3qa.wsdot.wa.gov/traffic/api/TrafficFlow/TrafficFlowREST.svc/GetTrafficFlowsAsJson?AccessCode=" + apikey,
+			url: "http://www.wsdot.wa.gov/traffic/api/TrafficFlow/TrafficFlowREST.svc/GetTrafficFlowsAsJson?AccessCode=" + apikey,
 			renderer: renderer,
 			toWebMercator: true,
 			useJsonp: true,

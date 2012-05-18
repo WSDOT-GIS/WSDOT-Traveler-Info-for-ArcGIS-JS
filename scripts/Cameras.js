@@ -82,7 +82,7 @@ function init() {
 	renderer = new esri.renderer.SimpleRenderer(symbol);
 	cameraLayer = new wsdot.layers.CameraGraphicsLayer({
 		id: "cameras",
-		url: "http://webpub3qa.wsdot.wa.gov/traffic/api/HighwayCameras/HighwayCamerasREST.svc/GetCamerasAsJson?AccessCode=" + apikey,
+		url: "http://www.wsdot.wa.gov/traffic/api/HighwayCameras/HighwayCamerasREST.svc/GetCamerasAsJson?AccessCode=" + apikey,
 		renderer: renderer,
 		toWebMercator: true,
 		useJsonp: true,
