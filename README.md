@@ -18,7 +18,7 @@ Displays [traffic camera data from the Traveler Info. API REST endpoint](http://
 The sample pages are provided a Traveler Information API Access Code from the `apikey.js` file, which is not included in this repository.
 In order to create this file...
 
-1. Copy the `sample_apikey.js` and name it `apikey.js`.
+1. Copy the `sample_apikey.js` and name the copy `apikey.js`.
 2. If you do not already have a Traveler Information API access code, aquire one from the [Traveler Information API page](http://www.wsdot.wa.gov/Traffic/api/).
 3. Open `apikey.js` and replace the value of the `apikey` variable with your access code.
 
