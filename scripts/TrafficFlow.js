@@ -1,12 +1,12 @@
 /*global dojo, dijit, esri, wsdot, apikey*/
 /*jslint white:true, browser:true */
+var map, gfxLayer;
 (function () {
 	"use strict";
 	dojo.require("dijit.layout.BorderContainer");
 	dojo.require("dijit.layout.ContentPane");
 	dojo.require("esri.map");
 
-	var map;
 
 	/**
 	 * Creates a collection of information used for creating the renderer for the Traffic Flow layer. 
@@ -53,7 +53,7 @@
 	 * Set up the application (once the dojo references have been loaded.) 
 	 */
 	function init() {
-		var initExtent, basemap, infoTemplate, renderer, refreshInterval, infos, gfxLayer;
+		var initExtent, basemap, infoTemplate, renderer, refreshInterval, infos;
 		// Set up the map's initial extent and create the map.
 		initExtent = new esri.geometry.Extent({
 			xmax: -12915620.315713434,
@@ -105,7 +105,11 @@
 		// Setup an event handler that will send an error message to the console if anything goes wrong during refresh.
 		dojo.connect(gfxLayer, "onRefereshEnd", function(error) {
 			if (error) {
-				console.error("An error occurred refreshing the camera graphics.", error);
+				if (typeof(window.console) !== "undefined") {
+					window.console.error("An error occurred refreshing the camera graphics.", error);
+				} else {
+					window.alert(error);
+				}
 			}
 		});
 		// Add the layer to the map.

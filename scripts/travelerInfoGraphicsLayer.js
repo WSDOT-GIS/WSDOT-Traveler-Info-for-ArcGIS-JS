@@ -64,7 +64,7 @@
 						// Try to parse a date from the string value.
 						date = parseDotNetDate(value);
 						// If it was a date, assign the date to the attribute.  Otherwise assign the original string value.
-						attributes[name] = date !== null ? date : value.trim();
+						attributes[name] = date !== null ? date : dojo.trim(value);
 					} else {
 						attributes[name] = value;
 					}
@@ -85,7 +85,7 @@
 							newAttrName = attributes.hasOwnProperty(oName) ? name + oName : oName;
 							if (typeof(oValue) === "string") {
 								date = parseDotNetDate(oValue);
-								attributes[newAttrName] = date !== null ? date : oValue.trim();
+								attributes[newAttrName] = date !== null ? date : dojo.trim(oValue);
 							} else {
 								attributes[newAttrName] = oValue;
 							}
