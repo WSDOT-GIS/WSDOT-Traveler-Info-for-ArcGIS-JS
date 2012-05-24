@@ -8,6 +8,10 @@
 
 	var map;
 
+	/**
+	 * Creates a collection of information used for creating the renderer for the Traffic Flow layer. 
+	 * @return {object[]}
+	 */
 	function createRendererInfos() {
 		var output, colors, values, symbol, name;
 
@@ -45,8 +49,12 @@
 		return output;
 	}
 
+	/**
+	 * Set up the application (once the dojo references have been loaded.) 
+	 */
 	function init() {
 		var initExtent, basemap, infoTemplate, renderer, refreshInterval, infos, gfxLayer;
+		// Set up the map's initial extent and create the map.
 		initExtent = new esri.geometry.Extent({
 			xmax: -12915620.315713434,
 			xmin: -14001637.613589166,
@@ -62,14 +70,18 @@
 		basemap = new esri.layers.ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer");
 		map.addLayer(basemap);  
 
+		// Setup the event handler for resizing the map.
 		dojo.connect(map, 'onLoad', function(theMap) {
 			//resize the map when the browser resizes
 			dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
 		});
 
+		// Create the renderer infos. 
 		infos = createRendererInfos();
+		// Create the renderer and assign a default symbol.
 		renderer = new esri.renderer.UniqueValueRenderer(infos.unknown.symbol, "FlowReadingValue");
-		// Add the renderer values.
+		
+		// Loop through the "infos" and add renderer values for each..
 		(function(){
 			var name;
 			for (name in infos) {
@@ -78,7 +90,10 @@
 				}
 			}
 		}());
+		
+		// Create the info template for the popups. (This could be customized to look better.)
 		infoTemplate = new esri.InfoTemplate("${Description}", "${*}");
+		// Create the traffic flow graphics layer.
 		gfxLayer = new wsdot.layers.TravelerInfoGraphicsLayer({
 			id: "trafficFlow",
 			url: "http://www.wsdot.wa.gov/traffic/api/TrafficFlow/TrafficFlowREST.svc/GetTrafficFlowsAsJson?AccessCode=" + apikey,
@@ -87,11 +102,13 @@
 			useJsonp: true,
 			infoTemplate: infoTemplate
 		});
+		// Setup an event handler that will send an error message to the console if anything goes wrong during refresh.
 		dojo.connect(gfxLayer, "onRefereshEnd", function(error) {
 			if (error) {
 				console.error("An error occurred refreshing the camera graphics.", error);
 			}
 		});
+		// Add the layer to the map.
 		map.addLayer(gfxLayer);
 
 		/**

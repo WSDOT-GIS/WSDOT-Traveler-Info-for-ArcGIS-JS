@@ -31,6 +31,11 @@ function init() {
 		// return table;
 	// }
 	
+	/**
+	 * Creates an HTML unordered list from the attributes of a camera graphic.
+	 * @param {esri.Graphic} graphic A graphic from the Camera Grahpics Layer.
+	 * @return {DOMElement} An HTML unordered list (ul element).
+	 */
 	function createList(graphic) {
 		var attributes = graphic.attributes, camera, i, l, list, item, a;
 		
@@ -77,8 +82,11 @@ function init() {
 		dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
 	});
 	
+	// Create the symbol for the camera graphics.
 	symbol = new esri.symbol.PictureMarkerSymbol("images/camera.png", 24, 12);
+	// Create the info template for the balloon that appears when a camera graphic is clicked.
 	infoTemplate = new esri.InfoTemplate("Cameras", createList);
+	// Create the renderer for the layer using the symbol and info template.
 	renderer = new esri.renderer.SimpleRenderer(symbol);
 	cameraLayer = new wsdot.layers.CameraGraphicsLayer({
 		id: "cameras",
@@ -88,11 +96,13 @@ function init() {
 		useJsonp: true,
 		infoTemplate: infoTemplate
 	});
+	// Connect an event handler to send an error to the console if there is a problem refreshing the layer.
 	dojo.connect(cameraLayer, "onRefereshEnd", function(error) {
 		if (error) {
 			console.error("An error occurred refreshing the camera graphics.", error);
 		}
 	})
+	// Add the camera layer to the map.
 	map.addLayer(cameraLayer);
 	
 	/**
