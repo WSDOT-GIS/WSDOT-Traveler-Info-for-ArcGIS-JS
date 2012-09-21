@@ -1,12 +1,10 @@
 /*global dojo, dijit, esri*/
-dojo.require("dijit.layout.BorderContainer");
-dojo.require("dijit.layout.ContentPane");
-dojo.require("esri.map");
-
-var map;
- 
-function init() {
+require(["dijit/layout/BorderContainer", "dijit/layout/ContentPane", "esri/map", "wsdot/layers/CameraGraphicsLayer", "dojo/domReady!"], function() {
 	"use strict";
+	
+	var map;
+ 
+
 	
 	// function createTable(graphic) {
 		// var attributes = graphic.attributes, camera, i, l, table, row, cell, name, names = [], j, jl;
@@ -80,6 +78,7 @@ function init() {
 	dojo.connect(map, 'onLoad', function(theMap) {
 		//resize the map when the browser resizes
 		dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
+		map.resize();
 	});
 	
 	// Create the symbol for the camera graphics.
@@ -115,5 +114,5 @@ function init() {
 	
 	// Set the layers to refresh every minute.
 	refresh = setInterval(refresh, 60000);
-}
-dojo.addOnLoad(init);
+
+});

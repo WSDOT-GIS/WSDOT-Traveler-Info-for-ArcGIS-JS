@@ -6,15 +6,23 @@
 		<!--The viewport meta tag is used to improve the presentation and behavior of the samples on iOS devices-->
 		<meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
 		<title>Traffic Cameras</title>
-		<link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.0/js/dojo/dijit/themes/claro/claro.css">
+		<link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.1/js/dojo/dijit/themes/claro/claro.css">
 		<style>
 			html, body { height: 100%; width: 100%; margin: 0; padding: 0; }
 			#map{padding:0;}
 		</style>
-		<script>var djConfig = {parseOnLoad: true};</script>
-		<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.0"></script>
+		<script>var dojoConfig = {
+			async: true,
+			parseOnLoad: true,
+			packages: [
+				{
+					name: "wsdot",
+					location: location.pathname.replace(/\/[^\/]+$/, "") + "/scripts/wsdot"
+				}
+			]
+		};</script>
+		<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.1"></script>
 		<script src="scripts/apikey.js"></script>
-		<script src="scripts/wsdot/layers/CameraGraphicsLayer.js"></script>
 		<script src="scripts/Cameras.js"></script>
 	</head>
  
