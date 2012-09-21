@@ -1,11 +1,8 @@
 /*global dojo, dijit, esri, wsdot, apikey*/
 /*jslint white:true, browser:true */
-var map, gfxLayer;
-(function () {
+require(["dijit/layout/BorderContainer", "dijit/layout/ContentPane", "esri/map", "wsdot/layers/TravelerInfoGraphicsLayer", "dojo/domReady!"], function() {
 	"use strict";
-	dojo.require("dijit.layout.BorderContainer");
-	dojo.require("dijit.layout.ContentPane");
-	dojo.require("esri.map");
+	var map, gfxLayer;
 
 
 	/**
@@ -127,4 +124,4 @@ var map, gfxLayer;
 		refresh = setInterval(refresh, 60000);
 	}
 	dojo.addOnLoad(init);
-}());
+});

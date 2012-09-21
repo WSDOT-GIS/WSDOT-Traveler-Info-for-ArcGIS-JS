@@ -11,10 +11,18 @@
 			html, body { height: 100%; width: 100%; margin: 0; padding: 0; }
 			#map{padding:0;}
 		</style>
-		<script>var djConfig = {parseOnLoad: true};</script>
-		<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.0"></script>
+		<script>var dojoConfig = {
+			async: false,
+			parseOnLoad: true,
+			packages: [
+				{
+					name: "wsdot",
+					location: location.pathname.replace(/\/[^\/]+$/, "") + "/scripts/wsdot"
+				}
+			]
+		};</script>
+		<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.1"></script>
 		<script src="scripts/apikey.js"></script>
-		<script src="scripts/wsdot/layers/TravelerInfoGraphicsLayer.js"></script>
 		<script src="scripts/TrafficFlow.js"></script>
 	</head>
  
