@@ -1,6 +1,6 @@
 /*global dojo, dijit, esri, wsdot, apikey*/
 /*jslint white:true, browser:true */
-require(["dijit/layout/BorderContainer", "dijit/layout/ContentPane", "esri/map", "wsdot/layers/TravelerInfoGraphicsLayer", "dojo/domReady!"], function() {
+require(["dojo/_base/Color", "dojo/on", "esri/dijit/Attribution", "esri/map", "wsdot/layers/TravelerInfoGraphicsLayer", "dojo/domReady!"], function(Color, on) {
 	"use strict";
 	var map, gfxLayer;
 
@@ -13,12 +13,12 @@ require(["dijit/layout/BorderContainer", "dijit/layout/ContentPane", "esri/map",
 		var output, colors, values, symbol, name;
 
 		colors = {
-			unknown: new dojo.Color("white"),
-			wideOpen: new dojo.Color("green"),
-			moderate: new dojo.Color("yellow"),
-			heavy: new dojo.Color("red"),
-			stopAndGo: new dojo.Color("black"),
-			noData: new dojo.Color("gray")
+			unknown: new Color("white"),
+			wideOpen: new Color("green"),
+			moderate: new Color("yellow"),
+			heavy: new Color("red"),
+			stopAndGo: new Color("black"),
+			noData: new Color("gray")
 		};
 
 		values = {
@@ -70,7 +70,10 @@ require(["dijit/layout/BorderContainer", "dijit/layout/ContentPane", "esri/map",
 		// Setup the event handler for resizing the map.
 		dojo.connect(map, 'onLoad', function(theMap) {
 			//resize the map when the browser resizes
-			dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
+			on(window, "resize", function() {
+				map.resize();
+			});
+			map.resize();
 		});
 
 		// Create the renderer infos. 
@@ -100,7 +103,7 @@ require(["dijit/layout/BorderContainer", "dijit/layout/ContentPane", "esri/map",
 			infoTemplate: infoTemplate
 		});
 		// Setup an event handler that will send an error message to the console if anything goes wrong during refresh.
-		dojo.connect(gfxLayer, "onRefereshEnd", function(error) {
+		dojo.connect(gfxLayer, "onRefreshEnd", function(error) {
 			if (error) {
 				if (typeof(window.console) !== "undefined") {
 					window.console.error("An error occurred refreshing the camera graphics.", error);

@@ -78,7 +78,6 @@ require(["dojo/on", "esri/dijit/Attribution", "esri/map", "wsdot/layers/CameraGr
 
 	dojo.connect(map, 'onLoad', function(theMap) {
 		//resize the map when the browser resizes
-		//dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
 		on(window, "resize", function() {
 			map.resize();
 		});
