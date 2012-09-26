@@ -9,8 +9,18 @@
 		<link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.2/js/esri/css/esri.css" />
 		<link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.1/js/dojo/dijit/themes/claro/claro.css">
 		<style>
-			html, body { height: 100%; width: 100%; margin: 0; padding: 0; }
-			#map{padding:0;}
+			html, body { 
+				height: 100%; 
+				width: 100%; 
+				margin: 0; 
+				padding: 0; 
+			}
+			#map{
+				padding:0;
+				overflow: hidden;
+				width: 100%;
+				height: 100%;
+			}
 		</style>
 		<script>var dojoConfig = {
 			async: true,
@@ -26,12 +36,9 @@
 		<script src="scripts/apikey.js"></script>
 		<script src="scripts/Cameras.js"></script>
 	</head>
- 
-  <body class="claro">
-	<div dojoType="dijit.layout.BorderContainer" design="headline" gutters="false" style="width: 100%; height: 100%; margin: 0;">
-		<div id="map" dojoType="dijit.layout.ContentPane" region="center" style="overflow:hidden;"></div>
-	</div>
 
-  </body>
+	<body>
+		<div id="map" class="claro"></div>
+	</body>
 
 </html> 

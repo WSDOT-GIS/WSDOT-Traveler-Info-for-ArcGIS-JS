@@ -1,6 +1,6 @@
 /*global dojo, dijit, esri*/
-require(["dijit/layout/BorderContainer", "dijit/layout/ContentPane", "esri/map", "wsdot/layers/CameraGraphicsLayer", "dojo/domReady!"], function(
-	BorderConainer, ContentPane, Map, CameraGraphicsLayer) {
+require(["dojo/on", "esri/map", "wsdot/layers/CameraGraphicsLayer", "dojo/domReady!"], function(
+	on, Map, CameraGraphicsLayer) {
 	"use strict";
 	
 	var map;
@@ -78,7 +78,10 @@ require(["dijit/layout/BorderContainer", "dijit/layout/ContentPane", "esri/map",
 
 	dojo.connect(map, 'onLoad', function(theMap) {
 		//resize the map when the browser resizes
-		dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
+		//dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
+		on(window, "resize", function() {
+			map.resize();
+		});
 		map.resize();
 	});
 	
