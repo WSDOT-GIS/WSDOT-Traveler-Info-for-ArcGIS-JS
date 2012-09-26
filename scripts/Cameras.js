@@ -1,6 +1,6 @@
 /*global dojo, dijit, esri*/
-require(["dojo/on", "esri/map", "wsdot/layers/CameraGraphicsLayer", "dojo/domReady!"], function(
-	on, Map, CameraGraphicsLayer) {
+require(["dojo/on", "esri/dijit/Attribution", "esri/map", "wsdot/layers/CameraGraphicsLayer", "dojo/domReady!"], function(
+	on, Attribution, Map, CameraGraphicsLayer) {
 	"use strict";
 	
 	var map;
