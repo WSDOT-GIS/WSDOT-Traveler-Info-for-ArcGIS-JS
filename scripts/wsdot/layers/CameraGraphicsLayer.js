@@ -71,7 +71,7 @@ define(["dojo/_base/declare", "esri/layers/graphics"], function(declare) {
 		return graphic;
 	}
 	
-	declare("wsdot.layers.CameraGraphicsLayer", esri.layers.GraphicsLayer, {
+	return declare("wsdot.layers.CameraGraphicsLayer", esri.layers.GraphicsLayer, {
 		onRefreshStart: function () {
 		},
 		onRefreshEnd: function (error) {

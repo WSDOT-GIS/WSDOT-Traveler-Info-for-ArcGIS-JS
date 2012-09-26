@@ -1,5 +1,6 @@
 /*global dojo, dijit, esri*/
-require(["dijit/layout/BorderContainer", "dijit/layout/ContentPane", "esri/map", "wsdot/layers/CameraGraphicsLayer", "dojo/domReady!"], function() {
+require(["dijit/layout/BorderContainer", "dijit/layout/ContentPane", "esri/map", "wsdot/layers/CameraGraphicsLayer", "dojo/domReady!"], function(
+	BorderConainer, ContentPane, Map, CameraGraphicsLayer) {
 	"use strict";
 	
 	var map;
@@ -87,7 +88,7 @@ require(["dijit/layout/BorderContainer", "dijit/layout/ContentPane", "esri/map",
 	infoTemplate = new esri.InfoTemplate("Cameras", createList);
 	// Create the renderer for the layer using the symbol and info template.
 	renderer = new esri.renderer.SimpleRenderer(symbol);
-	cameraLayer = new wsdot.layers.CameraGraphicsLayer({
+	cameraLayer = new CameraGraphicsLayer({
 		id: "cameras",
 		url: "http://www.wsdot.wa.gov/traffic/api/HighwayCameras/HighwayCamerasREST.svc/GetCamerasAsJson?AccessCode=" + apikey,
 		renderer: renderer,
