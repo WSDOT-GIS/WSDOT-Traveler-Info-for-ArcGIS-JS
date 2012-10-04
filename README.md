@@ -31,7 +31,6 @@ This page demonstrates the wsdot.layers.CameraGraphicsLayer.
 This page demonstrates displaying the Traffic Flow data via the wsdot.layers.TravelerInfoGraphicsLayer.
 
 ## TODO ##
-* `Cameras.html`: Display camera images in a lightbox type control instead of displaying camera info in a table.
 * Some of the REST endpoints return data with a start and end location.  Figure out how to handle them (show just start or end point?)
 * Complete documentation for layer classes.
 
