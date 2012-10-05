@@ -1,6 +1,6 @@
 /*global dojo, dijit, esri*/
-require(["dojo/on", "esri/dijit/Attribution", "dojox/image/Lightbox", "esri/map", "wsdot/layers/CameraGraphicsLayer"], function(
-	on, Attribution, Lightbox, Map, CameraGraphicsLayer) {
+require(["apikey", "dojo/on", "esri/dijit/Attribution", "dojox/image/Lightbox", "esri/map", "wsdot/layers/CameraGraphicsLayer"], function(
+	apikey, on, Attribution, Lightbox, Map, CameraGraphicsLayer) {
 	"use strict";
 	
 	var map, lightboxDialog, initExtent, basemap, symbol, infoTemplate, renderer, cameraLayer, refreshInterval;

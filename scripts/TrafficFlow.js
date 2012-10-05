@@ -1,6 +1,6 @@
-/*global dojo, dijit, esri, wsdot, apikey*/
+/*global dojo, dijit, esri, wsdot, require*/
 /*jslint white:true, browser:true */
-require(["dojo/_base/Color", "dojo/on", "esri/dijit/Attribution", "esri/map", "wsdot/layers/TravelerInfoGraphicsLayer", "dojo/domReady!"], function(Color, on) {
+require(["apikey", "dojo/on", "esri/dijit/Attribution", "dojo/_base/Color", "esri/map", "wsdot/layers/TravelerInfoGraphicsLayer"], function(apikey, on, Attribution, Color) {
 	"use strict";
 	var map, gfxLayer;
 
@@ -47,10 +47,10 @@ require(["dojo/_base/Color", "dojo/on", "esri/dijit/Attribution", "esri/map", "w
 	}
 
 	/**
-	 * Set up the application (once the dojo references have been loaded.) 
+	 * Set up the application 
 	 */
-	function init() {
-		var initExtent, basemap, infoTemplate, renderer, refreshInterval, infos;
+	(function() {
+		var initExtent, basemap, infoTemplate, renderer, infos;
 		// Set up the map's initial extent and create the map.
 		initExtent = new esri.geometry.Extent({
 			xmax: -12915620.315713434,
@@ -125,6 +125,5 @@ require(["dojo/_base/Color", "dojo/on", "esri/dijit/Attribution", "esri/map", "w
 
 		// Set the layers to refresh every minute.
 		refresh = setInterval(refresh, 60000);
-	}
-	dojo.addOnLoad(init);
+	}());
 });
