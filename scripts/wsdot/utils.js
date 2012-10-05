@@ -51,7 +51,7 @@ define(function() {
 			output = ["<dl>"];
 			for (name in attributes) {
 				if (attributes.hasOwnProperty(name) && (ignoreRe == null || ignoreRe.exec(name) === null)) {
-					output.push(["<dt>", splitPascalCase(name), "</dt>", "<dd>", attributes[name], "</dd>"].join(""));
+					output.push(["<dt>", splitPascalCase(name), "</dt>", "<dd>", attributes[name] || "(null)", "</dd>"].join(""));
 				}
 			}
 			output.push("</dl>");
