@@ -2,12 +2,12 @@
 /*jslint white:true, browser:true */
 require([
 	"apikey", 
-	"wsdot/layers/highwayAlertEventCategories", 
+	"wsdot/renderer/AlertRendererFactory", 
 	"dojo/on", 
 	"esri/dijit/Attribution", 
 	"esri/map", 
 	"wsdot/layers/TravelerInfoGraphicsLayer"
-	], function(apikey, categories, on, Attribution) {
+	], function(apikey, AlertRendererFactory, on, Attribution) {
 	"use strict";
 	var map, gfxLayer;
 
@@ -40,7 +40,7 @@ require([
 			});
 			map.resize();
 		});
-		renderer = categories.createRenderer("images/alert");
+		renderer = AlertRendererFactory.createRenderer("images/alert");
 		
 		// Create the info template for the popups. (This could be customized to look better.)
 		infoTemplate = new esri.InfoTemplate("${EventCategory}", function (graphic) {
