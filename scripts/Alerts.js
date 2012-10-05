@@ -1,6 +1,6 @@
 /*global dojo, dijit, esri, wsdot, require*/
 /*jslint white:true, browser:true */
-require(["apikey", "dojo/on", "esri/dijit/Attribution", "dojo/_base/Color", "esri/map", "wsdot/layers/TravelerInfoGraphicsLayer"], function(apikey, on, Attribution, Color) {
+require(["apikey", "wsdot/utils", "dojo/on", "esri/dijit/Attribution", "dojo/_base/Color", "esri/map", "wsdot/layers/TravelerInfoGraphicsLayer"], function(apikey, utils, on, Attribution, Color) {
 	"use strict";
 	var map, gfxLayer;
 
@@ -21,15 +21,6 @@ require(["apikey", "dojo/on", "esri/dijit/Attribution", "dojo/_base/Color", "esr
 			Highest: new Color("red")
 		};
 
-		values = {
-			unknown: 0,
-			wideOpen: 1,
-			moderate: 2,
-			heavy: 3,
-			stopAndGo: 4,
-			noData: 5
-		};
-
 		output = {};
 
 		for (name in colors) {
@@ -38,7 +29,7 @@ require(["apikey", "dojo/on", "esri/dijit/Attribution", "dojo/_base/Color", "esr
 				symbol.setColor(colors[name]).setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_DIAMOND);
 				output[name] = {
 					symbol: symbol,
-					value: name //values[name]
+					value: name
 				};
 			}
 		}
@@ -92,7 +83,9 @@ require(["apikey", "dojo/on", "esri/dijit/Attribution", "dojo/_base/Color", "esr
 		}());
 		
 		// Create the info template for the popups. (This could be customized to look better.)
-		infoTemplate = new esri.InfoTemplate("${Description}", "${*}");
+		infoTemplate = new esri.InfoTemplate("${EventCategory}", function (graphic) {
+			return utils.graphicToList(graphic, /(?:(?:Longitude)|(?:latitude))/i);
+		}); //"${*}");
 		// Create the traffic flow graphics layer.
 		gfxLayer = new wsdot.layers.TravelerInfoGraphicsLayer({
 			id: "alerts",
