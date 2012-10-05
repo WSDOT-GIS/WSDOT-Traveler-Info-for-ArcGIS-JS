@@ -1,10 +1,11 @@
 /*global define, esri */
 /*jslint white:true*/
-define(["dojo/_base/Color", "esri/renderer", "esri/symbol"], function (Color) {
+define(["esri/renderer", "esri/symbol"], function () {
 	"use strict";
 	// This list returned from http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/HighwayAlertsREST.svc/GetEventCategoriesAsJson
-	var categories, colors, priorityValues;
+	var categories, priorityValues;
 	
+	// Each alert category is grouped into a super-category for symbolization.
 	categories = {
 		"Construction": [
 			"Construction",
@@ -102,15 +103,7 @@ define(["dojo/_base/Color", "esri/renderer", "esri/symbol"], function (Color) {
 		// ]
 	};
 	
-	colors = {
-		Unknown: new Color("white"),
-		Lowest: new Color("#ffffcc"),
-		Low: new Color("yellow"),
-		Medium: new Color("#f7921e"),
-		High: new Color("red"),
-		Highest: new Color("red")
-	};
-	
+	// These values are used to determine what image is used.
 	priorityValues = {
 		Unknown: 5,
 		Lowest: 4,
@@ -120,28 +113,28 @@ define(["dojo/_base/Color", "esri/renderer", "esri/symbol"], function (Color) {
 		Highest: 1
 	};
 	
-	function getCategory(subCategory) {
-		var catName, category, currentSub, i, l, output;
-		for (catName in categories) {
-			if (categories.hasOwnProperty(catName)) {
-				category = categories[catName];
-				for (i = 0, l = category.length; i < l; i += 1) {
-					currentSub = category[i];
-					if (currentSub === subCategory) {
-						output = catName;
-						break;
-					}
-				}
-				if (output) {
-					break;
-				}
-			}
-		}
-		return output || "Alert";
-	}
+	// function getCategory(subCategory) {
+		// var catName, category, currentSub, i, l, output;
+		// for (catName in categories) {
+			// if (categories.hasOwnProperty(catName)) {
+				// category = categories[catName];
+				// for (i = 0, l = category.length; i < l; i += 1) {
+					// currentSub = category[i];
+					// if (currentSub === subCategory) {
+						// output = catName;
+						// break;
+					// }
+				// }
+				// if (output) {
+					// break;
+				// }
+			// }
+		// }
+		// return output || "Alert";
+	// }
 	
 	function createRenderer(alertImageRoot) {
-		var renderer, symbol, w = 25, h = 25, fieldDelimiter = ",", imagePrefixes, ext = ".png", closureSymbol;
+		var renderer, w = 25, h = 25, fieldDelimiter = ",", imagePrefixes, ext = ".png", closureSymbol;
 		
 		imagePrefixes = {
 			"Construction": "Flagger",
@@ -150,7 +143,7 @@ define(["dojo/_base/Color", "esri/renderer", "esri/symbol"], function (Color) {
 			"Weather": "Weather"
 		};
 		
-		closureSymbol = new esri.symbol.PictureMarkerSymbol(alertImageRoot + "/RoadClosure.png");
+		closureSymbol = new esri.symbol.PictureMarkerSymbol(alertImageRoot + "/RoadClosure.png", w, h);
 		
 		renderer = new esri.renderer.UniqueValueRenderer(
 			new esri.symbol.PictureMarkerSymbol(alertImageRoot + "/AccidentAlert5.png", w, h),
@@ -167,8 +160,13 @@ define(["dojo/_base/Color", "esri/renderer", "esri/symbol"], function (Color) {
 				if (categories.hasOwnProperty(catName)) {
 					for (priorityName in priorityValues) {
 						if (priorityValues.hasOwnProperty(priorityName)) {
-							img = [alertImageRoot, "/", imagePrefixes[catName], priorityValues[priorityName], ext].join("");
-							symbol = catName === "Closure" ? closureSymbol : new esri.symbol.PictureMarkerSymbol(img, w, h);
+							if (catName === "Closure") {
+								img = null;
+								symbol = closureSymbol;
+							} else {
+								img = [alertImageRoot, "/", imagePrefixes[catName], priorityValues[priorityName], ext].join("");
+								symbol = new esri.symbol.PictureMarkerSymbol(img, w, h);
+							}
 							
 							// Loop through the sub-categories...
 							subCategories = categories[catName];
