@@ -84,7 +84,7 @@ require(["apikey", "wsdot/utils", "dojo/on", "esri/dijit/Attribution", "dojo/_ba
 		
 		// Create the info template for the popups. (This could be customized to look better.)
 		infoTemplate = new esri.InfoTemplate("${EventCategory}", function (graphic) {
-			return utils.graphicToList(graphic, /(?:(?:Longitude)|(?:latitude))/i);
+			return utils.graphicToList(graphic, /(?:(?:Longitude)|(?:latitude)|(?:AlertID))/i);
 		}); //"${*}");
 		// Create the traffic flow graphics layer.
 		gfxLayer = new wsdot.layers.TravelerInfoGraphicsLayer({
