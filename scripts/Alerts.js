@@ -1,41 +1,50 @@
 /*global dojo, dijit, esri, wsdot, require*/
 /*jslint white:true, browser:true */
-require(["apikey", "wsdot/utils", "dojo/on", "esri/dijit/Attribution", "dojo/_base/Color", "esri/map", "wsdot/layers/TravelerInfoGraphicsLayer"], function(apikey, utils, on, Attribution, Color) {
+require([
+	"apikey", 
+	"wsdot/utils", 
+	"wsdot/layers/highwayAlertEventCategories", 
+	"dojo/on", 
+	"esri/dijit/Attribution", 
+	"dojo/_base/Color", 
+	"esri/map", 
+	"wsdot/layers/TravelerInfoGraphicsLayer"
+	], function(apikey, utils, categories, on, Attribution, Color) {
 	"use strict";
 	var map, gfxLayer;
 
 
-	/**
-	 * Creates a collection of information used for creating the renderer for the Traffic Flow layer. 
-	 * @return {object[]}
-	 */
-	function createRendererInfos() {
-		var output, colors, values, symbol, name;
-
-		colors = {
-			unknown: new Color("purple"),
-			Lowest: new Color("white"),
-			Low: new Color("#ffffcc"),
-			Medium: new Color("yellow"),
-			High: new Color("#f7921e"),
-			Highest: new Color("red")
-		};
-
-		output = {};
-
-		for (name in colors) {
-			if (colors.hasOwnProperty(name)) {
-				symbol = new esri.symbol.SimpleMarkerSymbol();
-				symbol.setColor(colors[name]).setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_DIAMOND);
-				output[name] = {
-					symbol: symbol,
-					value: name
-				};
-			}
-		}
-
-		return output;
-	}
+	// /**
+	 // * Creates a collection of information used for creating the renderer for the Traffic Flow layer. 
+	 // * @return {object[]}
+	 // */
+	// function createRendererInfos() {
+		// var output, colors, values, symbol, name;
+// 
+		// colors = {
+			// unknown: new Color("white"),
+			// Lowest: new Color("#ffffcc"),
+			// Low: new Color("yellow"),
+			// Medium: new Color("#f7921e"),
+			// High: new Color("red"),
+			// Highest: new Color("red")
+		// };
+// 
+		// output = {};
+// 
+		// for (name in colors) {
+			// if (colors.hasOwnProperty(name)) {
+				// symbol = new esri.symbol.SimpleMarkerSymbol();
+				// symbol.setColor(colors[name]).setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_DIAMOND);
+				// output[name] = {
+					// symbol: symbol,
+					// value: name
+				// };
+			// }
+		// }
+// 
+		// return output;
+	// }
 
 	/**
 	 * Set up the application 
@@ -67,20 +76,21 @@ require(["apikey", "wsdot/utils", "dojo/on", "esri/dijit/Attribution", "dojo/_ba
 			map.resize();
 		});
 
-		// Create the renderer infos. 
-		infos = createRendererInfos();
-		// Create the renderer and assign a default symbol.
-		renderer = new esri.renderer.UniqueValueRenderer(infos.unknown.symbol, "Priority");
-		
-		// Loop through the "infos" and add renderer values for each..
-		(function(){
-			var name;
-			for (name in infos) {
-				if (infos.hasOwnProperty(name)) {
-					renderer.addValue(infos[name]);
-				}
-			}
-		}());
+		// // Create the renderer infos. 
+		// infos = createRendererInfos();
+		// // Create the renderer and assign a default symbol.
+		// renderer = new esri.renderer.UniqueValueRenderer(infos.unknown.symbol, "Priority");
+// 		
+		// // Loop through the "infos" and add renderer values for each..
+		// (function(){
+			// var name;
+			// for (name in infos) {
+				// if (infos.hasOwnProperty(name)) {
+					// renderer.addValue(infos[name]);
+				// }
+			// }
+		// }());
+		renderer = categories.createRenderer("images/alert");
 		
 		// Create the info template for the popups. (This could be customized to look better.)
 		infoTemplate = new esri.InfoTemplate("${EventCategory}", function (graphic) {
