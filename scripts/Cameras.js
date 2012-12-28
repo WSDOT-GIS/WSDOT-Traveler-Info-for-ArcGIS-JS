@@ -53,66 +53,7 @@ require(["require", "dojo/on", "esri/dijit/Attribution", "esri/map", "wsdot/laye
 		}
 	});
 	
-	function setupOnClickEvent() {
-		require(["dojox/image/Lightbox"], function (Lightbox) {
-			var lightboxDialog;
-
-			// Connect the click event.
-			return dojo.connect(cameraLayer, "onClick", function (event) {
-				var cameras, groupName = "cameras", i, l, camera;
-
-				function createTitle(camera) {
-					var output;
-					if (camera.CameraOwner) {
-						if (camera.OwnerURL) {
-							output = [camera.Title, " (<a href='", camera.OwnerURL, "' target='_blank'>", camera.CameraOwner, "</a>)"].join("");
-						} else {
-							output = [camera.Title, " (", camera.CameraOwner, ")"].join("");
-						}
-					} else {
-						output = camera.Title;
-					}
-					return output;
-				}
-
-				if (!lightboxDialog) {
-					// Create the lightbox.
-					lightboxDialog = new dojox.image.LightboxDialog({});
-					lightboxDialog.startup();
-				} else {
-					// Remove existing graphics from the lightbox.
-					lightboxDialog.removeGroup(groupName);
-				}
-
-				// Get the list of cameras.
-				cameras = event.graphic.attributes.cameras;
-
-				if (cameras.length === 1) {
-					camera = cameras[0];
-					lightboxDialog.show({
-						title: createTitle(camera),
-						href: camera.ImageURL
-					});
-				} else {
-					for (i = 1, l = cameras.length; i < l; i += 1) {
-						camera = cameras[i];
-						lightboxDialog.addImage({
-							title: createTitle(camera),
-							href: camera.ImageURL
-						}, groupName);
-					}
-					camera = cameras[0];
-					lightboxDialog.show({
-						group: groupName,
-						title: createTitle(camera),
-						href: camera.ImageURL
-					});
-				}
-			});
-		});
-	}
-
-	setupOnClickEvent();
+	CameraGraphicsLayer.setupLightboxOnClickEvent(cameraLayer);
 
 	// Add the camera layer to the map.
 	map.addLayer(cameraLayer);

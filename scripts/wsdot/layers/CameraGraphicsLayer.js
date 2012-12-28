@@ -11,7 +11,7 @@
 define(["dojo/_base/declare", "esri/layers/graphics"], function(declare) {
 	"use strict";
 	
-	var travelerApiSR = new esri.SpatialReference({wkid: 4326});
+	var output, travelerApiSR = new esri.SpatialReference({wkid: 4326});
 	
 	
 	function getCameraAttributes(cameraData) {
@@ -72,8 +72,70 @@ define(["dojo/_base/declare", "esri/layers/graphics"], function(declare) {
 		
 		return graphic;
 	}
+
+	function setupLightboxOnClickEvent(cameraLayer) {
+		var deferred;
+		require(["dojox/image/Lightbox"], function (Lightbox) {
+			var lightboxDialog;
+
+			// Connect the click event.
+			deferred = dojo.connect(cameraLayer, "onClick", function (event) {
+				var cameras, groupName = "cameras", i, l, camera;
+
+				function createTitle(camera) {
+					var output;
+					if (camera.CameraOwner) {
+						if (camera.OwnerURL) {
+							output = [camera.Title, " (<a href='", camera.OwnerURL, "' target='_blank'>", camera.CameraOwner, "</a>)"].join("");
+						} else {
+							output = [camera.Title, " (", camera.CameraOwner, ")"].join("");
+						}
+					} else {
+						output = camera.Title;
+					}
+					return output;
+				}
+
+				if (!lightboxDialog) {
+					// Create the lightbox.
+					lightboxDialog = new dojox.image.LightboxDialog({});
+					lightboxDialog.startup();
+				} else {
+					// Remove existing graphics from the lightbox.
+					lightboxDialog.removeGroup(groupName);
+				}
+
+				// Get the list of cameras.
+				cameras = event.graphic.attributes.cameras;
+
+				if (cameras.length === 1) {
+					camera = cameras[0];
+					lightboxDialog.show({
+						title: createTitle(camera),
+						href: camera.ImageURL
+					});
+				} else {
+					for (i = 1, l = cameras.length; i < l; i += 1) {
+						camera = cameras[i];
+						lightboxDialog.addImage({
+							title: createTitle(camera),
+							href: camera.ImageURL
+						}, groupName);
+					}
+					camera = cameras[0];
+					lightboxDialog.show({
+						group: groupName,
+						title: createTitle(camera),
+						href: camera.ImageURL
+					});
+				}
+			});
+		});
+
+		return deferred;
+	}
 	
-	return declare("wsdot.layers.CameraGraphicsLayer", esri.layers.GraphicsLayer, {
+	output = declare("wsdot.layers.CameraGraphicsLayer", esri.layers.GraphicsLayer, {
 		onRefreshStart: function () {
 		},
 		onRefreshEnd: function (error) {
@@ -193,5 +255,9 @@ define(["dojo/_base/declare", "esri/layers/graphics"], function(declare) {
 			});
 		}
 	});
+
+	output.setupLightboxOnClickEvent = setupLightboxOnClickEvent;
+
+	return output;
 	
 });
