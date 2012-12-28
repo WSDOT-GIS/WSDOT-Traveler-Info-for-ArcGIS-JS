@@ -1,6 +1,6 @@
 /*global dojo, dijit, esri*/
-require(["apikey", "dojo/on", "esri/dijit/Attribution", "dojox/image/Lightbox", "esri/map", "wsdot/layers/CameraGraphicsLayer"], function(
-	apikey, on, Attribution, Lightbox, Map, CameraGraphicsLayer) {
+require(["dojo/on", "esri/dijit/Attribution", "dojox/image/Lightbox", "esri/map", "wsdot/layers/CameraGraphicsLayer"], function(
+	on, Attribution, Lightbox, Map, CameraGraphicsLayer) {
 	"use strict";
 	
 	var map, lightboxDialog, initExtent, basemap, symbol, infoTemplate, renderer, cameraLayer, refreshInterval;
@@ -31,15 +31,18 @@ require(["apikey", "dojo/on", "esri/dijit/Attribution", "dojox/image/Lightbox", 
 	// Create the symbol for the camera graphics.
 	symbol = new esri.symbol.PictureMarkerSymbol("images/camera.png", 24, 12);
 	// // Create the info template for the balloon that appears when a camera graphic is clicked.
-	// infoTemplate = new esri.InfoTemplate("Cameras", createList);
+	// infoTemplate = new esri.InfoTemplate("Cameras", createList);
+
+
+
 	// Create the renderer for the layer using the symbol and info template.
 	renderer = new esri.renderer.SimpleRenderer(symbol);
 	cameraLayer = new CameraGraphicsLayer({
 		id: "cameras",
-		url: "http://www.wsdot.wa.gov/traffic/api/HighwayCameras/HighwayCamerasREST.svc/GetCamerasAsJson?AccessCode=" + apikey,
+		url: "proxy.ashx?http://www.wsdot.wa.gov/traffic/api/HighwayCameras/HighwayCamerasREST.svc/GetCamerasAsJson",
 		renderer: renderer,
 		toWebMercator: true,
-		useJsonp: true
+		useJsonp: false
 	});
 	// Connect an event handler to send an error to the console if there is a problem refreshing the layer.
 	dojo.connect(cameraLayer, "onRefereshEnd", function(error) {

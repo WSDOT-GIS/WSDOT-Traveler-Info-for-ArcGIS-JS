@@ -1,13 +1,12 @@
 /*global dojo, dijit, esri, wsdot, require*/
 /*jslint white:true, browser:true */
 require([
-	"apikey", 
 	"wsdot/renderer/AlertRendererFactory", 
 	"dojo/on", 
 	"esri/dijit/Attribution", 
 	"esri/map", 
 	"wsdot/layers/TravelerInfoGraphicsLayer"
-	], function(apikey, AlertRendererFactory, on, Attribution) {
+	], function(AlertRendererFactory, on, Attribution) {
 	"use strict";
 	var map, gfxLayer;
 
@@ -39,7 +38,8 @@ require([
 				map.resize();
 			});
 			map.resize();
-		});
+		});
+
 		renderer = AlertRendererFactory.createRenderer("images/alert");
 		
 		// Create the info template for the popups. (This could be customized to look better.)
@@ -55,7 +55,7 @@ require([
 		// Create the traffic flow graphics layer.
 		gfxLayer = new wsdot.layers.TravelerInfoGraphicsLayer({
 			id: "alerts",
-			url: "http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/HighwayAlertsREST.svc/GetAlertsAsJson?AccessCode=" + apikey,
+			url: "proxy.ashx?http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/HighwayAlertsREST.svc/GetAlertsAsJson",
 			renderer: renderer,
 			toWebMercator: true,
 			useJsonp: true,

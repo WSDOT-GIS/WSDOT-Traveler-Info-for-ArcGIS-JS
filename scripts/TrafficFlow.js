@@ -1,6 +1,6 @@
 /*global dojo, dijit, esri, wsdot, require*/
 /*jslint white:true, browser:true */
-require(["apikey", "dojo/on", "esri/dijit/Attribution", "dojo/_base/Color", "esri/map", "wsdot/layers/TravelerInfoGraphicsLayer"], function(apikey, on, Attribution, Color) {
+require(["dojo/on", "esri/dijit/Attribution", "dojo/_base/Color", "esri/map", "wsdot/layers/TravelerInfoGraphicsLayer"], function(on, Attribution, Color) {
 	"use strict";
 	var map, gfxLayer;
 
@@ -96,7 +96,7 @@ require(["apikey", "dojo/on", "esri/dijit/Attribution", "dojo/_base/Color", "esr
 		// Create the traffic flow graphics layer.
 		gfxLayer = new wsdot.layers.TravelerInfoGraphicsLayer({
 			id: "trafficFlow",
-			url: "http://www.wsdot.wa.gov/traffic/api/TrafficFlow/TrafficFlowREST.svc/GetTrafficFlowsAsJson?AccessCode=" + apikey,
+			url: "proxy.ashx?http://www.wsdot.wa.gov/traffic/api/TrafficFlow/TrafficFlowREST.svc/GetTrafficFlowsAsJson",
 			renderer: renderer,
 			toWebMercator: true,
 			useJsonp: true,
@@ -105,7 +105,7 @@ require(["apikey", "dojo/on", "esri/dijit/Attribution", "dojo/_base/Color", "esr
 		// Setup an event handler that will send an error message to the console if anything goes wrong during refresh.
 		dojo.connect(gfxLayer, "onRefreshEnd", function(error) {
 			if (error) {
-				if (typeof(window.console) !== "undefined") {
+				if (window.console) {
 					window.console.error("An error occurred refreshing the camera graphics.", error);
 				} else {
 					window.alert(error);
