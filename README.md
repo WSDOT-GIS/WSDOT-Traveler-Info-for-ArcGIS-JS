@@ -38,9 +38,9 @@ This page demonstrates displaying the Traffic Flow data via the wsdot.layers.Tra
 
 Licensed under the [MIT license].
 
-  [WSDOT Traveler Information API]: http://www.wsdot.wa.gov/Traffic/api/
-  [ArcGIS JavaScript API]: http://links.esri.com/javascript
-  [WSDOT Traveler Information API REST endpoints]: http://www.wsdot.wa.gov/traffic/api/
-  [traffic camera data from the Traveler Info. API REST endpoint]: http://www.wsdot.wa.gov/traffic/api/HighwayCameras/HighwayCamerasREST.svc/Help
-  [Traveler Information API page]: http://www.wsdot.wa.gov/Traffic/api/
-  [MIT license]: http://www.opensource.org/licenses/MIT
+  [WSDOT Traveler Information API]:http://www.wsdot.wa.gov/Traffic/api/
+  [ArcGIS JavaScript API]:http://links.esri.com/javascript
+  [WSDOT Traveler Information API REST endpoints]:http://www.wsdot.wa.gov/traffic/api/
+  [traffic camera data from the Traveler Info. API REST endpoint]:http://www.wsdot.wa.gov/traffic/api/HighwayCameras/HighwayCamerasREST.svc/Help
+  [Traveler Information API page]:http://www.wsdot.wa.gov/Traffic/api/
+  [MIT license]:http://www.opensource.org/licenses/MIT
