@@ -68,7 +68,7 @@ require(["dojo/on", "esri/dijit/Attribution", "dojo/_base/Color", "esri/map", "w
 		map.addLayer(basemap);  
 
 		// Setup the event handler for resizing the map.
-		dojo.connect(map, 'onLoad', function(theMap) {
+		dojo.connect(map, 'onLoad', function() {
 			//resize the map when the browser resizes
 			on(window, "resize", function() {
 				map.resize();

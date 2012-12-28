@@ -3,7 +3,10 @@ require(["dojo/on", "esri/dijit/Attribution", "dojox/image/Lightbox", "esri/map"
 	on, Attribution, Lightbox, Map, CameraGraphicsLayer) {
 	"use strict";
 	
-	var map, lightboxDialog, initExtent, basemap, symbol, infoTemplate, renderer, cameraLayer, refreshInterval;
+	var map, lightboxDialog, initExtent, basemap, symbol, renderer, cameraLayer, refreshInterval;
+
+	esri.config.defaults.io.proxyUrl = "Proxy.ashx";
+
 	initExtent = new esri.geometry.Extent({
 		xmax: -12915620.315713434,
 		xmin: -14001637.613589166,
@@ -15,12 +18,12 @@ require(["dojo/on", "esri/dijit/Attribution", "dojox/image/Lightbox", "esri/map"
 	});
 	map = new esri.Map("map",{extent:initExtent});
  
-	//Add the world street map layer to the map. View the ArcGIS Online site for services http://arcgisonline/home/search.html?t=content&f=typekeywords:service	
-	basemap = new esri.layers.ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer");
+	//Add the world topo. map layer to the map. View the ArcGIS Online site for services http://arcgisonline/home/search.html?t=content&f=typekeywords:service	
+	basemap = new esri.layers.ArcGISTiledMapServiceLayer("http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer");
 	map.addLayer(basemap);  
 
 
-	dojo.connect(map, 'onLoad', function(theMap) {
+	dojo.connect(map, 'onLoad', function() {
 		//resize the map when the browser resizes
 		on(window, "resize", function() {
 			map.resize();
@@ -30,19 +33,15 @@ require(["dojo/on", "esri/dijit/Attribution", "dojox/image/Lightbox", "esri/map"
 	
 	// Create the symbol for the camera graphics.
 	symbol = new esri.symbol.PictureMarkerSymbol("images/camera.png", 24, 12);
-	// // Create the info template for the balloon that appears when a camera graphic is clicked.
-	// infoTemplate = new esri.InfoTemplate("Cameras", createList);
-
-
 
 	// Create the renderer for the layer using the symbol and info template.
 	renderer = new esri.renderer.SimpleRenderer(symbol);
+
+	// Create the camera graphics layer.
 	cameraLayer = new CameraGraphicsLayer({
 		id: "cameras",
-		url: "proxy.ashx?http://www.wsdot.wa.gov/traffic/api/HighwayCameras/HighwayCamerasREST.svc/GetCamerasAsJson",
 		renderer: renderer,
-		toWebMercator: true,
-		useJsonp: false
+		toWebMercator: true
 	});
 	// Connect an event handler to send an error to the console if there is a problem refreshing the layer.
 	dojo.connect(cameraLayer, "onRefereshEnd", function(error) {
@@ -115,6 +114,5 @@ require(["dojo/on", "esri/dijit/Attribution", "dojox/image/Lightbox", "esri/map"
 	}
 	
 	// Set the layers to refresh every minute.
-	refresh = setInterval(refresh, 60000);
-
+	refreshInterval = setInterval(refresh, 60000);
 });

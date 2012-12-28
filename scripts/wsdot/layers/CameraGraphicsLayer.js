@@ -1,5 +1,5 @@
-﻿/*global esri, dojo, jQuery */
-/*jslint white: true, nomen: true */
+﻿/*global esri, dojo, jQuery, define */
+/*jslint white: true, nomen: true, plusplus: true */
 
 /**
  * @author Jeff Jacobson 
@@ -18,6 +18,7 @@ define(["dojo/_base/declare", "esri/layers/graphics"], function(declare) {
 		var attributes, name, cameraLocation, clName, toOmit = /(Display)?((?:Longitude)|(?:Latitude))/;
 		attributes = {};
 		// Copy the properties from the camera data into "attributes" (excluding "CameraLocation").
+		/*jslint forin:true */
 		for (name in cameraData) {
 			if (!toOmit.test(name) && cameraData.hasOwnProperty(name) && name !== "CameraLocation") {
 				attributes[name] = cameraData[name];
@@ -36,6 +37,7 @@ define(["dojo/_base/declare", "esri/layers/graphics"], function(declare) {
 				}
 			}
 		}
+		/*jslint forin:false */
 		
 		return attributes;
 	}
@@ -79,21 +81,23 @@ define(["dojo/_base/declare", "esri/layers/graphics"], function(declare) {
 		/**
 		 * Creates a new instance of CameraGraphicsLayer
 		 * @param {Object} options The options for initializing this layer.  See the esri.layers.GraphicsLayer documentation for details.
+		 * @param {String} [options.url] Use this to override the default URL.
 		 */
 		constructor: function (options) {
-			this.url = options.url;
+			this.url = options.url || "http://www.wsdot.wa.gov/traffic/api/HighwayCameras/HighwayCamerasREST.svc/GetCamerasAsJson";
 			this._options = options;
 			this.refresh();
 		},
 		
 		/**
-		 * Searches all of the graphics in the layer until a graphic in the same location as "point" is found.  
+		 * Searches all of the graphics in the layer until a graphic in the same location as "point" is found.
 		 * @param {esri.geometry.Point} point 
 		 * @return {esri.Graphic | null} Returns the first graphic found in the same location as "point", or null if no match is found.
 		 */
 		getGraphicAtLocation: function(point) {
-			var layer = this, i, l, graphic, otherGraphic = null;
+			var i, l, graphic, otherGraphic = null;
 			
+			// Note that "this" refers to the CameraGraphicsLayer object.
 			for (i = 0, l = this.graphics.length; i < l; i++) {
 				graphic = this.graphics[i];
 				if (graphic.geometry.x === point.x && graphic.geometry.y === point.y) {
@@ -124,6 +128,8 @@ define(["dojo/_base/declare", "esri/layers/graphics"], function(declare) {
 				newGraphic = cameraToGraphic(cameraData, this._options.toWebMercator);
 				this.add(newGraphic);
 			}
+
+			return this;
 		},
 		
 		/**
@@ -158,26 +164,33 @@ define(["dojo/_base/declare", "esri/layers/graphics"], function(declare) {
 				layer.setRenderer(this._options.renderer);
 			}
 			
-			if (this._options.useJsonp) {
-				dojo.io.script.get({
-					url: layer.url,
-					callbackParamName: "callback",
-					load: addCameraDataAsGraphics,
-					error: function (error) {
-						layer.onRefreshEnd(error); // Trigger event.
-					}
-				});
-			} else {
-				// Query the WSDOT Traveler API for camera data...
-				return dojo.xhrGet({
-					url: layer.url,
-					handleAs: "json",
-					load: addCameraDataAsGraphics,
-					error: function (error) {
-						layer.onRefreshEnd(error); // Trigger event.
-					}
-				}, { useProxy: false });
-			}
+			////if (this._options.useJsonp) {
+			////	dojo.io.script.get({
+			////		url: layer.url,
+			////		callbackParamName: "callback",
+			////		load: addCameraDataAsGraphics,
+			////		error: function (error) {
+			////			layer.onRefreshEnd(error); // Trigger event.
+			////		}
+			////	});
+			////} else {
+			////	// Query the WSDOT Traveler API for camera data...
+			////	return dojo.xhrGet({
+			////		url: layer.url,
+			////		handleAs: "json",
+			////		load: addCameraDataAsGraphics,
+			////		error: function (error) {
+			////			layer.onRefreshEnd(error); // Trigger event.
+			////		}
+			////	}, { useProxy: false });
+			////}
+
+			esri.request({
+				url: layer.url,
+				handleAs: "json"
+			}).then(addCameraDataAsGraphics, function (error) {
+				layer.onRefreshEnd(error); // Trigger event.
+			});
 		}
 	});
 	
