@@ -1,9 +1,10 @@
-/*global dojo, dijit, esri*/
-require(["dojo/on", "esri/dijit/Attribution", "dojox/image/Lightbox", "esri/map", "wsdot/layers/CameraGraphicsLayer"], function(
-	on, Attribution, Lightbox, Map, CameraGraphicsLayer) {
+/*global dojo, dijit, esri, dojox, require*/
+/*jslint browser:true*/
+require(["require", "dojo/on", "esri/dijit/Attribution", "esri/map", "wsdot/layers/CameraGraphicsLayer"], function(
+	require, on, Attribution, Map, CameraGraphicsLayer) {
 	"use strict";
 	
-	var map, lightboxDialog, initExtent, basemap, symbol, renderer, cameraLayer, refreshInterval;
+	var map, initExtent, basemap, symbol, renderer, cameraLayer, refreshIntervalId;
 
 	esri.config.defaults.io.proxyUrl = "Proxy.ashx";
 
@@ -46,62 +47,73 @@ require(["dojo/on", "esri/dijit/Attribution", "dojox/image/Lightbox", "esri/map"
 	// Connect an event handler to send an error to the console if there is a problem refreshing the layer.
 	dojo.connect(cameraLayer, "onRefereshEnd", function(error) {
 		if (error) {
-			console.error("An error occurred refreshing the camera graphics.", error);
+			if (window.console) {
+				window.console.error("An error occurred refreshing the camera graphics.", error);
+			}
 		}
 	});
 	
-	// Connect the click event.
-	dojo.connect(cameraLayer, "onClick", function(event) {
-		var cameras, groupName = "cameras", i, l, camera;
-		
-		function createTitle(camera) {
-			var output;
-			if (camera.CameraOwner) {
-				if (camera.OwnerURL) {
-					output = [camera.Title, " (<a href='", camera.OwnerURL, "' target='_blank'>", camera.CameraOwner, "</a>)"].join("");
-				} else {
-					output = [camera.Title, " (", camera.CameraOwner, ")"].join("");
+	function setupOnClickEvent() {
+		require(["dojox/image/Lightbox"], function (Lightbox) {
+			var lightboxDialog;
+
+			// Connect the click event.
+			return dojo.connect(cameraLayer, "onClick", function (event) {
+				var cameras, groupName = "cameras", i, l, camera;
+
+				function createTitle(camera) {
+					var output;
+					if (camera.CameraOwner) {
+						if (camera.OwnerURL) {
+							output = [camera.Title, " (<a href='", camera.OwnerURL, "' target='_blank'>", camera.CameraOwner, "</a>)"].join("");
+						} else {
+							output = [camera.Title, " (", camera.CameraOwner, ")"].join("");
+						}
+					} else {
+						output = camera.Title;
+					}
+					return output;
 				}
-			} else {
-				output = camera.Title;
-			}
-			return output;
-		}
-		
-		if (!lightboxDialog) {
-			// Create the lightbox.
-			lightboxDialog = new dojox.image.LightboxDialog({});
-			lightboxDialog.startup();
-		} else {
-			// Remove existing graphics from the lightbox.
-			lightboxDialog.removeGroup(groupName);
-		}
-		
-		// Get the list of cameras.
-		cameras = event.graphic.attributes.cameras;
-		
-		if (cameras.length === 1) {
-			camera = cameras[0];
-			lightboxDialog.show({
-				title: createTitle(camera),
-				href: camera.ImageURL
+
+				if (!lightboxDialog) {
+					// Create the lightbox.
+					lightboxDialog = new dojox.image.LightboxDialog({});
+					lightboxDialog.startup();
+				} else {
+					// Remove existing graphics from the lightbox.
+					lightboxDialog.removeGroup(groupName);
+				}
+
+				// Get the list of cameras.
+				cameras = event.graphic.attributes.cameras;
+
+				if (cameras.length === 1) {
+					camera = cameras[0];
+					lightboxDialog.show({
+						title: createTitle(camera),
+						href: camera.ImageURL
+					});
+				} else {
+					for (i = 1, l = cameras.length; i < l; i += 1) {
+						camera = cameras[i];
+						lightboxDialog.addImage({
+							title: createTitle(camera),
+							href: camera.ImageURL
+						}, groupName);
+					}
+					camera = cameras[0];
+					lightboxDialog.show({
+						group: groupName,
+						title: createTitle(camera),
+						href: camera.ImageURL
+					});
+				}
 			});
-		} else {
-			for (i = 1, l = cameras.length; i < l; i += 1) {
-				camera = cameras[i];
-				lightboxDialog.addImage({
-					title: createTitle(camera),
-					href: camera.ImageURL
-				}, groupName);
-			}
-			camera = cameras[0];
-			lightboxDialog.show({
-				group: groupName, 
-				title: createTitle(camera),
-				href: camera.ImageURL
-			});
-		}
-	});
+		});
+	}
+
+	setupOnClickEvent();
+
 	// Add the camera layer to the map.
 	map.addLayer(cameraLayer);
 	
@@ -114,5 +126,6 @@ require(["dojo/on", "esri/dijit/Attribution", "dojox/image/Lightbox", "esri/map"
 	}
 	
 	// Set the layers to refresh every minute.
-	refreshInterval = setInterval(refresh, 60000);
+	refreshIntervalId = setInterval(refresh, 60000);
+
 });
