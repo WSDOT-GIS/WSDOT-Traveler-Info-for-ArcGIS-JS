@@ -53,7 +53,7 @@ require(["require", "dojo/on", "esri/dijit/Attribution", "esri/map", "wsdot/laye
 		}
 	});
 	
-	CameraGraphicsLayer.setupLightboxOnClickEvent(cameraLayer);
+	cameraLayer.setupLightboxOnClickEvent();
 
 	// Add the camera layer to the map.
 	map.addLayer(cameraLayer);
