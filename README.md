@@ -15,12 +15,12 @@ Displays [traffic camera data from the Traveler Info. API REST endpoint].  Each 
 
 ## Sample Pages ##
 
-The sample pages are provided a Traveler Information API Access Code from the `apikey.js` file, which is not included in this repository.
+The sample pages are provided a Traveler Information API Access Code from the `web.config` file, which is not included in this repository.
 In order to create this file...
 
-1. Copy the `sample_apikey.js` and name the copy `apikey.js`.
+1. Copy the `sample.web.config` and name the copy `web.config`.
 2. If you do not already have a Traveler Information API access code, aquire one from the [Traveler Information API page].
-3. Open `apikey.js` and replace the value of the `apikey` variable with your access code.
+3. Open `web.config` and replace the value of the `accessCode` setting with your access code.
 
 ### Cameras.html
 
