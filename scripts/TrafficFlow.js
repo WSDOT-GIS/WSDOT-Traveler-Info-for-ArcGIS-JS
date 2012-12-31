@@ -4,6 +4,8 @@ require(["dojo/on", "esri/dijit/Attribution", "dojo/_base/Color", "esri/map", "w
 	"use strict";
 	var map, gfxLayer;
 
+	// Setup the proxy URL.
+	esri.config.defaults.io.proxyUrl = "Proxy.ashx";
 
 	/**
 	 * Creates a collection of information used for creating the renderer for the Traffic Flow layer. 
@@ -96,10 +98,9 @@ require(["dojo/on", "esri/dijit/Attribution", "dojo/_base/Color", "esri/map", "w
 		// Create the traffic flow graphics layer.
 		gfxLayer = new wsdot.layers.TravelerInfoGraphicsLayer({
 			id: "trafficFlow",
-			url: "proxy.ashx?http://www.wsdot.wa.gov/traffic/api/TrafficFlow/TrafficFlowREST.svc/GetTrafficFlowsAsJson",
+			url: "http://www.wsdot.wa.gov/traffic/api/TrafficFlow/TrafficFlowREST.svc/GetTrafficFlowsAsJson",
 			renderer: renderer,
 			toWebMercator: true,
-			useJsonp: true,
 			infoTemplate: infoTemplate
 		});
 		// Setup an event handler that will send an error message to the console if anything goes wrong during refresh.

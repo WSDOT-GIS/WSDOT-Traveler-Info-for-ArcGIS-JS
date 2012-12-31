@@ -6,8 +6,10 @@ require(["require", "dojo/on", "esri/dijit/Attribution", "esri/map", "wsdot/laye
 	
 	var map, initExtent, basemap, symbol, renderer, cameraLayer, refreshIntervalId;
 
+	// Setup the proxy URL.
 	esri.config.defaults.io.proxyUrl = "Proxy.ashx";
 
+	// Define the initial extent of the map.  This will be roughly the extent of WA.
 	initExtent = new esri.geometry.Extent({
 		xmax: -12915620.315713434,
 		xmin: -14001637.613589166,
@@ -44,6 +46,7 @@ require(["require", "dojo/on", "esri/dijit/Attribution", "esri/map", "wsdot/laye
 		renderer: renderer,
 		toWebMercator: true
 	});
+
 	// Connect an event handler to send an error to the console if there is a problem refreshing the layer.
 	dojo.connect(cameraLayer, "onRefereshEnd", function(error) {
 		if (error) {
@@ -53,6 +56,7 @@ require(["require", "dojo/on", "esri/dijit/Attribution", "esri/map", "wsdot/laye
 		}
 	});
 	
+	// Set up the on click event for the layer so that a lightbox will show camera images.
 	cameraLayer.setupLightboxOnClickEvent();
 
 	// Add the camera layer to the map.

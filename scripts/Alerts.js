@@ -10,6 +10,9 @@ require([
 	"use strict";
 	var map, gfxLayer;
 
+	// Setup the proxy URL.
+	esri.config.defaults.io.proxyUrl = "Proxy.ashx";
+
 	/**
 	 * Set up the application 
 	 */
@@ -55,10 +58,9 @@ require([
 		// Create the traffic flow graphics layer.
 		gfxLayer = new wsdot.layers.TravelerInfoGraphicsLayer({
 			id: "alerts",
-			url: "proxy.ashx?http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/HighwayAlertsREST.svc/GetAlertsAsJson",
+			url: "http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/HighwayAlertsREST.svc/GetAlertsAsJson",
 			renderer: renderer,
 			toWebMercator: true,
-			useJsonp: true,
 			infoTemplate: infoTemplate
 		});
 		// Setup an event handler that will send an error message to the console if anything goes wrong during refresh.

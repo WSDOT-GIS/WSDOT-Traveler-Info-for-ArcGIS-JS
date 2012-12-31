@@ -196,26 +196,12 @@ define(["dojo/_base/declare", "esri/layers/graphics"], function(declare) {
 				layer.setRenderer(this._options.renderer);
 			}
 
-			if (this._options.useJsonp) {
-				dojo.io.script.get({
-					url: layer.url,
-					callbackParamName: "callback",
-					load: addDataAsGraphics,
-					error: function (error) {
-						layer.onRefreshEnd(error); // Trigger event.
-					}
-				});
-			} else {
-				// Query the WSDOT Traveler API for travelerInfo data...
-				return dojo.xhrGet({
-					url: layer.url,
-					handleAs: "json",
-					load: addDataAsGraphics,
-					error: function (error) {
-						layer.onRefreshEnd(error); // Trigger event.
-					}
-				}, { useProxy: false });
-			}
+			esri.request({
+				url: layer.url,
+				handleAs: "json"
+			}).then(addDataAsGraphics, function (error) {
+				layer.onRefreshEnd(error); // Trigger event.
+			});
 		}
 	});
 	
