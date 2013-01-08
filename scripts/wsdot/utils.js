@@ -1,5 +1,6 @@
 /*global define*/
 /*jslint white:true, eqeq:true, regexp:true*/
+
 define(function() {
 	"use strict";
 	

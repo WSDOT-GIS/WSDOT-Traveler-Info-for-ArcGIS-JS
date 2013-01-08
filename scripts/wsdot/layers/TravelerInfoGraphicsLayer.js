@@ -6,8 +6,6 @@
  * @author Jeff Jacobson 
  */
 
-/// <reference path="dojo.js.uncompressed.js" />
-
 define(["dojo/_base/declare", "esri/layers/graphics"], function(declare) {
 	"use strict";
 

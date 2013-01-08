@@ -1,14 +1,11 @@
-﻿/*global esri, dojo, jQuery, define */
+﻿/*global esri, dojo, dojox, jQuery, define */
 /*jslint white: true, nomen: true, plusplus: true */
 
 /**
  * @author Jeff Jacobson 
  */
 
-/// <reference path="dojo.js.uncompressed.js" />
-
-
-define(["dojo/_base/declare", "esri/layers/graphics"], function(declare) {
+define(["require", "dojo/_base/declare", "esri/layers/graphics"], function(require, declare) {
 	"use strict";
 	
 	var output, travelerApiSR = new esri.SpatialReference({wkid: 4326});
@@ -177,7 +174,7 @@ define(["dojo/_base/declare", "esri/layers/graphics"], function(declare) {
 		*/
 		setupLightboxOnClickEvent: function () {
 			var deferred, cameraLayer = this;
-			require(["dojox/image/Lightbox"], function (Lightbox) {
+			require(["dojox/image/Lightbox"], function () {
 				var lightboxDialog;
 
 				// Connect the click event.
