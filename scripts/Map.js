@@ -1,4 +1,7 @@
-﻿require(["wsdot/layers/CameraGraphicsLayer", "esri/dijit/Attribution", "esri/map"], function (CameraGraphicsLayer) {
+﻿require(["wsdot/layers/CameraGraphicsLayer",
+	"wsdot/renderer/AlertRendererFactory",
+	"wsdot/layers/TravelerInfoGraphicsLayer",
+	"esri/dijit/Attribution", "esri/map"], function (CameraGraphicsLayer, AlertRendererFactory, TravelerInfoGraphicsLayer) {
 	"use strict";
 	var map;
 
@@ -32,5 +35,32 @@
 		cameraLayer.setupLightboxOnClickEvent();
 
 		map.addLayer(cameraLayer);
+	}());
+
+	// Setup the alerts layer
+	(function () {
+		var renderer, infoTemplate, alertsLayer;
+		renderer = AlertRendererFactory.createRenderer("images/alert");
+
+		// Create the info template for the popups. (This could be customized to look better.)
+		infoTemplate = new esri.InfoTemplate("${EventCategory}", function (graphic) {
+			var output;
+			if (graphic.attributes.ExtendedDescription) {
+				output = graphic.attributes.ExtendedDescription;
+			} else {
+				output = graphic.attributes.HeadlineDescription;
+			}
+			return output;
+		}); //"${*}");
+		// Create the traffic flow graphics layer.
+		alertsLayer = new wsdot.layers.TravelerInfoGraphicsLayer({
+			id: "alerts",
+			url: "http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/HighwayAlertsREST.svc/GetAlertsAsJson",
+			renderer: renderer,
+			toWebMercator: true,
+			infoTemplate: infoTemplate
+		});
+
+		map.addLayer(alertsLayer);
 	}());
 });

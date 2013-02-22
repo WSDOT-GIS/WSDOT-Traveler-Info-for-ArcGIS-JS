@@ -13,7 +13,8 @@ define(["esri/renderer", "esri/symbol"], function () {
 			"Lane Closure",
 			"Maintenance"
 		],
-		"Alert": [			"Abandoned Vehicle",
+		"Alert": [
+			"Abandoned Vehicle",
 			"Alarm",
 			"AMBER Alert",
 			"Bridge",
@@ -60,8 +61,11 @@ define(["esri/renderer", "esri/symbol"], function () {
 			"Sand / Plowing / Deicing",
 			"Shift Change",
 			"Toll",
-			"Utilities"
-		],		"Closure": [
+			"Utilities"
+
+
+		],
+		"Closure": [
 			"Avalanche Control",
 			"Bomb",
 			"Bridge Closed",
@@ -100,7 +104,8 @@ define(["esri/renderer", "esri/symbol"], function () {
 		]
 		// "Unclassified": [
 
-		// ]
+		// ]
+
 	};
 	
 	// These values are used to determine what image is used.
@@ -131,7 +136,8 @@ define(["esri/renderer", "esri/symbol"], function () {
 			// }
 		// }
 		// return output || "Alert";
-	// }
+	// }
+
 	
 	function createRenderer(alertImageRoot) {
 		var renderer, w = 25, h = 25, fieldDelimiter = ",", imagePrefixes, ext = ".png", closureSymbol;
