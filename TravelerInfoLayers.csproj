@@ -70,6 +70,8 @@
     <Content Include="LICENSE.txt" />
     <Content Include="scripts\Alerts.js" />
     <Content Include="scripts\Cameras.js" />
+    <Content Include="Map.html" />
+    <Content Include="scripts\Map.js" />
     <Content Include="scripts\TrafficFlow.js" />
     <Content Include="scripts\wsdot\layers\CameraGraphicsLayer.js" />
     <Content Include="scripts\wsdot\layers\TravelerInfoGraphicsLayer.js" />
@@ -107,16 +109,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>52622</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:52605/</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>
