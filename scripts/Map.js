@@ -66,6 +66,8 @@
 			map.addLayer(alertsLayer);
 		}());
 
+
+		// Setup the traffic flow layer.
 		(function () {
 			var infoTemplate;
 
