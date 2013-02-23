@@ -1,7 +1,8 @@
 ﻿require(["dojo/_base/Color", "wsdot/layers/CameraGraphicsLayer",
 	"wsdot/renderer/AlertRendererFactory",
 	"wsdot/layers/TravelerInfoGraphicsLayer",
-	"esri/dijit/Attribution", "esri/map"], function (Color, CameraGraphicsLayer, AlertRendererFactory, TravelerInfoGraphicsLayer) {
+	"wsdot/utils",
+	"esri/dijit/Attribution", "esri/map"], function (Color, CameraGraphicsLayer, AlertRendererFactory, TravelerInfoGraphicsLayer, utils) {
 		"use strict";
 		var map, cameraLayer, alertsLayer, travelerInfoLayer;
 
@@ -124,7 +125,9 @@
 			}());
 
 			// Create the info template for the popups. (This could be customized to look better.)
-			infoTemplate = new esri.InfoTemplate("${Description}", "${*}");
+			infoTemplate = new esri.InfoTemplate("${Description}", function (graphic) {
+				return utils.graphicToTable(graphic, /(Longitude)|(Latitude)|(FlowData)/);
+			});
 			// Create the traffic flow graphics layer.
 			travelerInfoLayer = new wsdot.layers.TravelerInfoGraphicsLayer({
 				id: "trafficFlow",

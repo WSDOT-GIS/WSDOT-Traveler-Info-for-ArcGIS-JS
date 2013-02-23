@@ -60,10 +60,36 @@ define(function() {
 		}
 		return output;
 	}
+
+	/**
+	 * Creates an HTML table of the attributes of an esri.Graphic (or any object that has a property named attributes that is an object). 
+	 * @param {Object} graphic An esri.Graphic (or any object that has a property named attributes that is an object).
+	 * @param {Regex} [ignoreRe] Any attribute with a name matching this Regex will be omitted from the output DL.  If no RE is given, all properties will be included. 
+	 * @returns {String}
+	 */
+	function graphicToTable(graphic, ignoreRe) {
+		var output, attributes = graphic.attributes, name, val;
+		if (graphic != null && graphic.attributes != null) {
+			output = ["<table>"];
+			for (name in attributes) {
+				if (attributes.hasOwnProperty(name) && (ignoreRe == null || ignoreRe.exec(name) === null)) {
+					val = attributes[name];
+					if (val == null) {
+						val = "(null)"
+					}
+					output.push(["<tr><th>", splitPascalCase(name), "</th><td>", val, "</td></tr>"].join(""));
+				}
+			}
+			output.push("</table>");
+			output = output.join("");
+		}
+		return output;
+	}
 	
 	return {
 		graphicToList: graphicToList,
 		splitPascalCase: splitPascalCase,
-		splitCamelCase: splitCamelCase
+		splitCamelCase: splitCamelCase,
+		graphicToTable: graphicToTable
 	};
 });
